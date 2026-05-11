@@ -8,9 +8,9 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { RequestImprestComponent } from './pages/request-imprest/request-imprest.component';
-import { ImprestListComponent } from './pages/imprest-list/imprest-list.component';
+import { DashboardComponent } from './modules/dashboard/dashboard/dashboard.component';
+import { RequestImprestComponent } from './modules/imprest/request-imprest/request-imprest.component';
+import { ImprestListComponent } from './modules/imprest/imprest-list/imprest-list.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 
