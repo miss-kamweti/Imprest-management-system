@@ -1,0 +1,50 @@
+<div class="h-screen w-64 bg-gray-900 text-white fixed p-4 flex flex-col">
+
+  <!-- TITLE -->
+  <h1 class="text-2xl font-bold mb-8">
+    Imprest System
+  </h1>
+
+  <!-- NAV -->
+  <nav class="flex flex-col gap-3 flex-1">
+
+    <!-- DASHBOARD (BOTH ROLES) -->
+    <a routerLink="/dashboard"
+       routerLinkActive="bg-gray-700"
+       class="p-3 rounded hover:bg-gray-700">
+      Dashboard
+    </a>
+
+    <!-- EMPLOYEE ONLY -->
+    <a *ngIf="isEmployee()"
+       routerLink="/request-imprest"
+       routerLinkActive="bg-gray-700"
+       class="p-3 rounded hover:bg-gray-700">
+      Request Imprest
+    </a>
+
+    <!-- ADMIN ONLY -->
+    <a *ngIf="isAdmin()"
+       routerLink="/imprest-list"
+       routerLinkActive="bg-gray-700"
+       class="p-3 rounded hover:bg-gray-700">
+      Imprest Approvals
+    </a>
+
+  </nav>
+
+  <!-- USER INFO -->
+  <div class="mt-auto border-t border-gray-700 pt-4">
+
+    <p class="text-sm text-gray-300">
+      Role: {{ auth.getUser()?.role }}
+    </p>
+
+    <button (click)="logout()"
+            class="mt-3 w-full bg-red-600 hover:bg-red-700 p-2 rounded">
+      Logout
+    </button>
+
+  </div>
+
+</div>
