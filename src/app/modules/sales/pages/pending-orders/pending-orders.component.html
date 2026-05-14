@@ -1,0 +1,64 @@
+<div class="p-6">
+  <h2 class="text-2xl font-bold mb-6">Pending Orders</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+    <div class="bg-yellow-50 rounded-lg p-4 border-l-4 border-yellow-500">
+      <h3 class="text-lg font-semibold text-yellow-800">Pending Orders</h3>
+      <p class="text-3xl font-bold text-yellow-600">{{ pendingOrders.length }}</p>
+    </div>
+    <div class="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
+      <h3 class="text-lg font-semibold text-blue-800">Total Orders</h3>
+      <p class="text-3xl font-bold text-blue-600">{{ allOrders.length }}</p>
+    </div>
+  </div>
+
+  <!-- Pending Orders Table -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h3 class="text-lg font-semibold mb-4">Orders Awaiting Action</h3>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-300">
+        <thead class="bg-yellow-100">
+          <tr>
+            <th class="border border-gray-300 px-4 py-2 text-left">Order #</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">Customer</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">Order Date</th>
+            <th class="border border-gray-300 px-4 py-2 text-center">Status</th>
+            <th class="border border-gray-300 px-4 py-2 text-right">Total (KES)</th>
+            <th class="border border-gray-300 px-4 py-2 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of pendingOrders" class="hover:bg-yellow-50">
+            <td class="border border-gray-300 px-4 py-2 font-semibold">#{{ order.id }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ order.customerName }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ order.orderDate | date: 'short' }}</td>
+            <td class="border border-gray-300 px-4 py-2 text-center">
+              <span [ngClass]="getStatusColor(order.status)" class="px-2 py-1 rounded text-xs font-medium">
+                {{ order.status }}
+              </span>
+            </td>
+            <td class="border border-gray-300 px-4 py-2 text-right font-semibold">{{ order.total | number }}</td>
+            <td class="border border-gray-300 px-4 py-2 text-center">
+              <select class="px-2 py-1 border rounded text-sm"
+                      #statusSelect
+                      (change)="updateOrderStatus(order.id, statusSelect.value)"
+                      [value]="order.status">
+                <option value="draft">Draft</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </td>
+          </tr>
+          <tr *ngIf="pendingOrders.length === 0">
+            <td colspan="6" class="border border-gray-300 px-4 py-4 text-center text-gray-500">
+              No pending orders
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

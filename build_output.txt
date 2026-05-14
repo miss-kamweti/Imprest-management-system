@@ -1,0 +1,20 @@
+
+> erp-system@0.0.0 build
+> ng build
+
+- Generating browser application bundles (phase: setup)...
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+
+Error: src/app/modules/admin/pages/user-list/user-list.component.html:129:56 - error TS2339: Property 'Math' does not exist on type 'UserListComponent'.
+
+129       Showing {{ (currentPage * pageSize) + 1 }} to {{ Math.min((currentPage + 1) * pageSize, totalUsers) }} of {{ totalUsers }} users
+                                                           ~~~~
+
+  src/app/modules/admin/pages/user-list/user-list.component.ts:8:16
+    8   templateUrl: './user-list.component.html'
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component UserListComponent.
+
+
+

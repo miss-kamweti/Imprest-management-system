@@ -1,0 +1,23 @@
+<div class="p-6 max-w-xl mx-auto bg-white shadow">
+
+  <h2 class="text-xl font-bold mb-4">Request Imprest</h2>
+
+  <input class="border p-2 w-full mb-2"
+         placeholder="Name"
+         [(ngModel)]="imprest.employeeName">
+
+  <input class="border p-2 w-full mb-2"
+         type="number"
+         placeholder="Amount"
+         [(ngModel)]="imprest.amount">
+
+  <textarea class="border p-2 w-full mb-2"
+            placeholder="Purpose"
+            [(ngModel)]="imprest.purpose"></textarea>
+
+   <button class="bg-green-600 text-white px-4 py-2"
+           (click)="submit()">
+     Submit Imprest
+   </button>
+
+</div>

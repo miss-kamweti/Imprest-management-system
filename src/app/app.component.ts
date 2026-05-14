@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,8 @@ export class AppComponent {
 
   // controls sidebar state
   isSidebarOpen = false;
+
+  constructor(public auth: AuthService) {}
 
   // toggle sidebar when menu button is clicked
   toggleSidebar(): void {

@@ -1,0 +1,140 @@
+<div class="h-screen w-64 bg-gray-900 text-white fixed p-4 flex flex-col z-10">
+
+   <!-- TITLE -->
+   <h1 class="text-2xl font-bold mb-8">
+     Imprest
+   </h1>
+
+
+   <nav class="flex flex-col gap-2 flex-1">
+
+
+     <a routerLink="/dashboard"
+        routerLinkActive="bg-gray-700"
+        class="block p-3 rounded hover:bg-gray-700">
+       Dashboard
+     </a>
+
+  
+      <div *ngIf="isHR()">
+        <p class="text-xs text-gray-500 uppercase mt-3 mb-1 px-3">Human Resources</p>
+        <a routerLink="/users"
+           routerLinkActive="bg-gray-700"
+           class="block p-3 rounded hover:bg-gray-700 text-sm">
+          User Management
+        </a>
+      </div>
+
+      
+      <div *ngIf="isAdmin()" class="mt-3">
+        <button (click)="toggleUserManagement()" 
+                class="w-full text-left p-3 rounded hover:bg-gray-700 flex justify-between items-center transition-colors">
+          <span class="text-xs text-gray-300 uppercase font-semibold">User Management</span>
+          <span class="text-gray-400 text-xs">{{ showUserManagement ? '▲' : '▼' }}</span>
+        </button>
+        
+  
+        <div *ngIf="showUserManagement" class="flex flex-col ml-2 border-l-2 border-gray-600">
+          <a routerLink="/users"
+             routerLinkActive="bg-gray-700"
+             class="block p-3 rounded hover:bg-gray-700 text-sm pl-4">
+            All Users
+          </a>
+          <a routerLink="/imprest-list"
+             routerLinkActive="bg-gray-700"
+             class="block p-3 rounded hover:bg-gray-700 text-sm pl-4">
+            Imprest Approvals
+          </a>
+        </div>
+      </div>
+
+     
+      <div *ngIf="isAdmin() || isManager()" class="mt-3">
+        <button (click)="toggleInventory()" 
+                class="w-full text-left p-3 rounded hover:bg-gray-700 flex justify-between items-center transition-colors">
+          <span class="text-xs text-gray-300 uppercase font-semibold">Inventory</span>
+          <span class="text-gray-400 text-xs">{{ showInventory ? '▲' : '▼' }}</span>
+        </button>
+        
+        <!-- Dropdown Menu -->
+        <div *ngIf="showInventory" class="flex flex-col ml-2 border-l-2 border-gray-600">
+          <a routerLink="/inventory"
+             routerLinkActive="bg-gray-700"
+             class="block p-3 rounded hover:bg-gray-700 text-sm pl-4">
+            Products
+          </a>
+          <a [routerLink]="['/inventory']" [queryParams]="{lowStock: 'true'}"
+             routerLinkActive="bg-gray-700"
+             class="block p-3 rounded hover:bg-gray-700 text-sm pl-4">
+            Low Stock Alerts
+          </a>
+        </div>
+      </div>
+
+      <!-- SALES MODULE (Admin & Manager) -->
+      <div *ngIf="isAdmin() || isManager()" class="mt-3">
+        <button (click)="toggleSales()" 
+                class="w-full text-left p-3 rounded hover:bg-gray-700 flex justify-between items-center transition-colors">
+          <span class="text-xs text-gray-300 uppercase font-semibold">Sales</span>
+          <span class="text-gray-400 text-xs">{{ showSales ? '▲' : '▼' }}</span>
+        </button>
+        
+        <!-- Dropdown Menu -->
+        <div *ngIf="showSales" class="flex flex-col ml-2 border-l-2 border-gray-600">
+          <a routerLink="/customers"
+             routerLinkActive="bg-gray-700"
+             class="block p-3 rounded hover:bg-gray-700 text-sm pl-4">
+            Customers
+          </a>
+          <a [routerLink]="['/sales']" [queryParams]="{pendingOrders: 'true'}"
+             routerLinkActive="bg-gray-700"
+             class="block p-3 rounded hover:bg-gray-700 text-sm pl-4">
+            Pending Orders
+          </a>
+        </div>
+      </div>
+
+      <div *ngIf="isEmployee() || isManager() || isHR() || isAccountant()" class="mt-3">
+        <button (click)="toggleEmployeeActions()"
+                class="w-full text-left p-3 rounded hover:bg-gray-700 flex justify-between items-center transition-colors">
+          <span class="text-xs text-gray-300 uppercase font-semibold">Imprest Actions</span>
+          <span class="text-gray-400 text-xs">{{ showEmployeeActions ? '▲' : '▼' }}</span>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div *ngIf="showEmployeeActions" class="flex flex-col ml-2 border-l-2 border-gray-600">
+          <a *ngIf="!isManager()" routerLink="/imprest-list"
+             routerLinkActive="bg-gray-700"
+             class="block p-3 rounded hover:bg-gray-700 text-sm pl-4">
+            Total Imprests
+          </a>
+          <a routerLink="/request-imprest"
+             routerLinkActive="bg-gray-700"
+             class="block p-3 rounded hover:bg-gray-700 text-sm pl-4">
+            Request Imprest
+          </a>
+          <a routerLink="/withdraw-imprest"
+             routerLinkActive="bg-gray-700"
+             class="block p-3 rounded hover:bg-gray-700 text-sm pl-4">
+            Withdraw Imprest
+          </a>
+        </div>
+      </div>
+
+   </nav>
+
+  <!-- USER INFO -->
+  <div class="mt-auto border-t border-gray-700 pt-4">
+
+    <p class="text-sm text-gray-300">
+      Role: {{ auth.getUser()?.role }}
+    </p>
+
+    <button (click)="logout()"
+            class="mt-3 w-full bg-blue-500 hover:bg-blue-700 p-2 rounded">
+      Logout
+    </button>
+
+  </div>
+
+</div>

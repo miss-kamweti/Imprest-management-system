@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ImprestService } from '../../../services/imprest.service';
+import { ImprestService } from '../../../core/services/imprest.service';
+import { UserService } from '../../../core/services/user.service';
+import { User } from '../../../shared/models/user.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,59 +9,73 @@ import { ImprestService } from '../../../services/imprest.service';
 })
 export class DashboardComponent implements OnInit {
 
-  total = 0;
-  approved = 0;
-  pending = 0;
-  rejected = 0;
+
+  totalImprests = 0;
+  approvedImprests = 0;
+  pendingImprests = 0;
+  rejectedImprests = 0;
+  withdrawnImprests = 0;
+  totalApprovedAmount = 0;
+  totalPendingAmount = 0;
+  totalWithdrawnAmount = 0;
+  recentImprests: any[] = [];
+
+
+  users: User[] = [];
+  activeUsers = 0;
+  inactiveUsers = 0;
 
   user: any;
+  isAdmin = false;
+  isEmployee = false;
 
-  constructor(private service: ImprestService) {}
+  constructor(
+    private service: ImprestService,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
 
     this.user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    this.isAdmin = this.user.role?.toLowerCase() === 'admin';
+    this.isEmployee = this.user.role?.toLowerCase() === 'employee';
 
     const data = this.service.getImprests();
 
-    // ADMIN VIEW
-    if (this.user.role === 'admin') {
+    const relevantImprests = this.isAdmin
+      ? data
+      : data.filter(d => d.createdBy === this.user.username);
 
-      this.total = data.length;
+    
+    this.totalImprests = relevantImprests.length;
+    this.approvedImprests = relevantImprests.filter(d => d.status === 'Approved').length;
+    this.pendingImprests = relevantImprests.filter(d => d.status === 'Pending').length;
+    this.rejectedImprests = relevantImprests.filter(d => d.status === 'Rejected').length;
+    this.withdrawnImprests = relevantImprests.filter(d => d.status === 'Withdrawn').length;
 
-      this.approved = data.filter(d =>
-        (d.status || '').toLowerCase().trim() === 'approved'
-      ).length;
+    this.totalApprovedAmount = relevantImprests
+      .filter(d => d.status === 'Approved')
+      .reduce((sum, d) => sum + (d.amount || 0), 0);
 
-      this.pending = data.filter(d =>
-        (d.status || '').toLowerCase().trim() === 'pending'
-      ).length;
+    this.totalPendingAmount = relevantImprests
+      .filter(d => d.status === 'Pending')
+      .reduce((sum, d) => sum + (d.amount || 0), 0);
 
-      this.rejected = data.filter(d =>
-        (d.status || '').toLowerCase().trim() === 'rejected'
-      ).length;
-    }
+    this.totalWithdrawnAmount = relevantImprests
+      .filter(d => d.status === 'Withdrawn')
+      .reduce((sum, d) => sum + (d.withdrawnAmount || d.amount || 0), 0);
 
-    // EMPLOYEE VIEW (ONLY THEIR OWN)
-    else {
+  
+    this.recentImprests = [...relevantImprests]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5);
 
-      const mine = data.filter(d =>
-        d.createdBy === this.user.username
-      );
-
-      this.total = mine.length;
-
-      this.approved = mine.filter(d =>
-        (d.status || '').toLowerCase().trim() === 'approved'
-      ).length;
-
-      this.pending = mine.filter(d =>
-        (d.status || '').toLowerCase().trim() === 'pending'
-      ).length;
-
-      this.rejected = mine.filter(d =>
-        (d.status || '').toLowerCase().trim() === 'rejected'
-      ).length;
+   
+    if (this.isAdmin) {
+      const allUsers = this.userService.getUsers();
+      this.activeUsers = allUsers.filter(u => u.status === 'active').length;
+      this.inactiveUsers = allUsers.filter(u => u.status === 'inactive').length;
+      this.users = allUsers.slice(0, 5);
     }
   }
 }

@@ -1,0 +1,194 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">Customers</h2>
+  </div>
+
+  <!-- CUSTOMER LIST -->
+  <div *ngIf="!selectedCustomer" class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
+          <th class="py-3 px-6">Name</th>
+          <th class="py-3 px-6">Email</th>
+          <th class="py-3 px-6">Phone</th>
+          <th class="py-3 px-6">Status</th>
+          <th class="py-3 px-6 text-center">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody class="text-gray-600 text-sm font-light">
+
+        <tr
+          *ngFor="let customer of customers"
+          class="border-b border-gray-200 hover:bg-gray-100"
+        >
+          <td class="py-3 px-6">
+            <span class="font-medium">
+              {{ customer?.name }}
+            </span>
+          </td>
+
+          <td class="py-3 px-6">
+            {{ customer?.email }}
+          </td>
+
+          <td class="py-3 px-6">
+            {{ customer?.phone }}
+          </td>
+
+          <td class="py-3 px-6">
+
+            <span
+              *ngIf="customer?.status === 'active'"
+              class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs"
+            >
+              Active
+            </span>
+
+            <span
+              *ngIf="customer?.status === 'inactive'"
+              class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
+            >
+              Inactive
+            </span>
+
+          </td>
+
+          <td class="py-3 px-6 text-center">
+            <button
+              (click)="viewDetails(customer)"
+              class="text-blue-500 hover:text-blue-700"
+            >
+              View Details
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="customers.length === 0">
+          <td colspan="5" class="py-4 px-6 text-center">
+            No customers found.
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CUSTOMER DETAILS -->
+  <div
+    *ngIf="selectedCustomer as customer"
+    class="bg-white rounded-lg shadow p-6"
+  >
+
+    <button
+      (click)="closeDetails()"
+      class="text-gray-500 hover:text-gray-700 mb-4 flex items-center"
+    >
+      <svg
+        class="w-4 h-4 mr-2"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 19l-7-7m0 0l7-7m-7 7h18"
+        ></path>
+      </svg>
+
+      Back to Customers
+    </button>
+
+    <!-- CUSTOMER INFO -->
+    <div class="border-b pb-4 mb-4">
+      <h3 class="text-xl font-bold text-gray-800">
+        {{ customer?.name }}
+      </h3>
+
+      <p class="text-gray-600">
+        {{ customer?.email }} |
+        {{ customer?.phone }}
+      </p>
+
+      <p class="text-gray-600">
+        {{ customer?.address }}
+      </p>
+    </div>
+
+    <!-- INVOICES -->
+    <h4 class="text-lg font-semibold mb-3">
+      Invoices
+    </h4>
+
+    <div class="overflow-x-auto">
+
+      <table class="w-full text-left border-collapse">
+
+        <thead>
+          <tr class="bg-gray-100 text-gray-600 uppercase text-xs leading-normal">
+            <th class="py-2 px-4">Invoice #</th>
+            <th class="py-2 px-4">Date</th>
+            <th class="py-2 px-4">Due Date</th>
+            <th class="py-2 px-4 text-right">Amount</th>
+            <th class="py-2 px-4">Status</th>
+          </tr>
+        </thead>
+
+        <tbody class="text-sm font-light">
+
+          <tr
+            *ngFor="let invoice of customerInvoices"
+            class="border-b border-gray-200 hover:bg-gray-50"
+          >
+
+            <td class="py-2 px-4 font-medium">
+              {{ invoice?.invoiceNumber }}
+            </td>
+
+            <td class="py-2 px-4">
+              {{ invoice?.invoiceDate }}
+            </td>
+
+            <td class="py-2 px-4">
+              {{ invoice?.dueDate }}
+            </td>
+
+            <td class="py-2 px-4 text-right font-semibold">
+              KES {{ invoice?.total | number }}
+            </td>
+
+            <td class="py-2 px-4">
+
+              <span
+                class="px-2 py-1 rounded-full text-xs"
+                [ngClass]="{
+                  'bg-green-100 text-green-800': invoice?.status === 'paid',
+                  'bg-yellow-100 text-yellow-800':
+                    invoice?.status === 'sent' ||
+                    invoice?.status === 'draft',
+                  'bg-red-100 text-red-800':
+                    invoice?.status === 'overdue'
+                }"
+              >
+                {{ invoice?.status | titlecase }}
+              </span>
+
+            </td>
+
+          </tr>
+
+          <tr *ngIf="customerInvoices.length === 0">
+            <td colspan="5" class="py-4 text-center text-gray-500">
+              No invoices found for this customer.
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,113 @@
+<div class="p-6 space-y-6">
+
+ 
+  <div class="flex justify-between items-center">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">Financial Dashboard</h1>
+      <p class="text-sm text-gray-500 mt-1">Welcome back, {{ currentUser?.username }} — financial overview.</p>
+    </div>
+    <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-semibold">Accountant View</span>
+  </div>
+
+
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="bg-white rounded-lg shadow p-5 border-l-4 border-blue-500">
+      <p class="text-sm text-gray-500 uppercase font-semibold">Total Imprests</p>
+      <p class="text-3xl font-bold text-gray-800 mt-1">{{ totalImprests }}</p>
+    </div>
+    <div class="bg-white rounded-lg shadow p-5 border-l-4 border-green-500">
+      <p class="text-sm text-gray-500 uppercase font-semibold">Approved Value</p>
+      <p class="text-3xl font-bold text-green-600 mt-1">KES {{ formattedApprovedAmount }}</p>
+    </div>
+    <div class="bg-white rounded-lg shadow p-5 border-l-4 border-yellow-500">
+      <p class="text-sm text-gray-500 uppercase font-semibold">Pending Requests</p>
+      <p class="text-3xl font-bold text-yellow-600 mt-1">{{ pendingRequests }}</p>
+    </div>
+    <div class="bg-white rounded-lg shadow p-5 border-l-4 border-orange-500">
+      <p class="text-sm text-gray-500 uppercase font-semibold">Pending Withdrawals</p>
+      <p class="text-3xl font-bold text-orange-600 mt-1">{{ pendingWithdrawals }}</p>
+    </div>
+  </div>
+
+
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="p-5 border-b">
+      <h3 class="text-lg font-semibold text-gray-700">Pending Withdrawals for Approval</h3>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Employee</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Reason</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pw of pendingWithdrawalList" class="border-b hover:bg-gray-50">
+            <td class="px-4 py-2 text-sm text-gray-700">{{ pw.employeeName }}</td>
+            <td class="px-4 py-2 text-sm">KES {{ pw.formattedPendingAmount }}</td>
+            <td class="px-4 py-2 text-sm text-gray-500">{{ pw.withdrawalReason }}</td>
+            <td class="px-4 py-2">
+              <div class="flex gap-2">
+                <button (click)="approveWithdrawal(pw.id)"
+                        class="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700">
+                  Approve
+                </button>
+                <button (click)="rejectWithdrawal(pw.id)"
+                        class="bg-red-600 text-white px-3 py-1 rounded text-xs hover:bg-red-700">
+                  Reject
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="pendingWithdrawalList.length === 0">
+            <td colspan="4" class="px-4 py-6 text-center text-gray-400 text-sm">
+              No pending withdrawals
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+ 
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="p-5 border-b">
+      <h3 class="text-lg font-semibold text-gray-700">Recent Imprest Requests</h3>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Employee</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Purpose</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let imp of recentImprests" class="border-b hover:bg-gray-50">
+            <td class="px-4 py-2 text-sm text-gray-700">{{ imp.employeeName }}</td>
+            <td class="px-4 py-2 text-sm">KES {{ imp.formattedAmount }}</td>
+            <td class="px-4 py-2 text-sm text-gray-500">{{ imp.purpose }}</td>
+            <td class="px-4 py-2 text-sm">{{ imp.date }}</td>
+            <td class="px-4 py-2">
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold {{ imp.statusClass }}">
+                {{ imp.status }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="recentImprests.length === 0">
+            <td colspan="5" class="px-4 py-6 text-center text-gray-400 text-sm">
+              No imprest requests yet
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

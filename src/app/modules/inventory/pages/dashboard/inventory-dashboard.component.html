@@ -1,0 +1,48 @@
+<div class="p-6">
+  <h2 class="text-2xl font-bold mb-4">{{ isLowStockView ? 'Low Stock Alerts' : 'Inventory Dashboard' }}</h2>
+  <div *ngIf="!isLowStockView" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+    <div class="bg-white rounded-lg shadow p-4">
+      <h3 class="text-lg font-semibold mb-2">Total Products</h3>
+      <p class="text-2xl font-bold text-blue-600">{{ totalProducts }}</p>
+    </div>
+    <div class="bg-white rounded-lg shadow p-4">
+      <h3 class="text-lg font-semibold mb-2">Low Stock Items</h3>
+      <p class="text-2xl font-bold text-yellow-600">{{ lowStockCount }}</p>
+    </div>
+    <div class="bg-white rounded-lg shadow p-4">
+      <h3 class="text-lg font-semibold mb-2">Out of Stock</h3>
+      <p class="text-2xl font-bold text-red-600">{{ outOfStockCount }}</p>
+    </div>
+    <div class="bg-white rounded-lg shadow p-4">
+      <h3 class="text-lg font-semibold mb-2">Total Value</h3>
+      <p class="text-2xl font-bold text-green-600">KES {{ totalValue }}</p>
+    </div>
+  </div>
+  
+  <div class="bg-white rounded-lg shadow p-6">
+    <h3 class="text-lg font-semibold mb-4">Low Stock Alerts</h3>
+    <div class="space-y-4">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 text-left">Product</th>
+            <th class="px-4 py-2 text-left">Category</th>
+            <th class="px-4 py-2 text-right">Qty</th>
+            <th class="px-4 py-2 text-right">Reorder</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of lowStockProducts" class="border-b hover:bg-gray-50">
+            <td class="px-4 py-2">{{ p.name }}</td>
+            <td class="px-4 py-2">{{ p.category }}</td>
+            <td class="px-4 py-2 text-right">{{ p.quantityOnHand }}</td>
+            <td class="px-4 py-2 text-right">{{ p.reorderLevel }}</td>
+          </tr>
+          <tr *ngIf="lowStockProducts.length === 0">
+            <td colspan="4" class="px-4 py-4 text-center text-gray-500">All items adequately stocked</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
