@@ -51,6 +51,7 @@ export class UserService {
         id: 1,
         username: 'kinuthia',
         email: 'kinuthia@gmail.com',
+        password: 'kinuthia123',
         role: 'admin',
         permissions: ['all'],
         department: 'IT',
@@ -62,6 +63,7 @@ export class UserService {
         id: 2,
         username: 'john',
         email: 'john@gmail.com',
+        password: 'john123',
         role: 'employee',
         permissions: ['imprest_request'],
         department: 'Operations',
@@ -73,6 +75,7 @@ export class UserService {
         id: 3,
         username: 'Jane',
         email: 'jane@gmail.com',
+        password: 'jane123',
         role: 'hr',
         permissions: ['employee_manage', 'leave_approve'],
         department: 'Human Resources',
@@ -80,8 +83,18 @@ export class UserService {
         lastActivity: new Date().toISOString(),
         storageWeight: 0
       },
-      
-      
+      {
+        id: 3,
+        username: 'Molly',
+        email: 'mollykamweti@gmail.com',
+        password: 'molly123',
+        role: 'accountant',
+        permissions: ['employee_manage', 'imprest_approve', 'imprest_withdraw'],
+        department: 'finance',
+        status: 'active',
+        lastActivity: new Date().toISOString(),
+        storageWeight: 0
+      },
     ];
   }
 
@@ -167,6 +180,7 @@ export class UserService {
           id: nextId++,
           username: creator,
           email: `${creator}@wholesalers.com`,
+          password: 'default123',
           role: 'employee',
           permissions: ['imprest_request'],
           department: 'Unknown',
@@ -192,6 +206,7 @@ export class UserService {
     const newUser: User = {
       ...user,
       id: newId,
+      password: user.password || 'default123',
       status: user.status || 'active',
       createdAt: new Date().toISOString(),
       lastActivity: new Date().toISOString(),

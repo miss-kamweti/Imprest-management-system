@@ -1,19 +1,67 @@
 <div class="max-w-md mx-auto p-6">
 
-  <h2 class="text-2xl font-bold mb-4">Login</h2>
+  <!-- STEP 1: Credentials -->
+  <div *ngIf="step === 'credentials'">
+    <h2 class="text-2xl font-bold mb-4">Login</h2>
 
-  <input [(ngModel)]="username"
-         placeholder="Username"
-         class="w-full border p-2 mb-3">
+    <input [(ngModel)]="username"
+           placeholder="Username"
+           class="w-full border p-2 mb-3 rounded">
 
-  <input [(ngModel)]="password"
-         type="password"
-         placeholder="Password"
-         class="w-full border p-2 mb-3">
+    <input [(ngModel)]="password"
+           type="password"
+           placeholder="Password"
+           class="w-full border p-2 mb-3 rounded">
 
-  <button (click)="login()"
-          class="bg-blue-600 text-white p-2 w-full">
-    Login
-  </button>
+    <button (click)="onSubmitCredentials()"
+            class="bg-blue-600 text-white p-2 w-full rounded hover:bg-blue-700">
+      Continue
+    </button>
+  </div>
+
+  <!-- STEP 2: OTP Verification -->
+  <div *ngIf="step === 'otp'">
+    <button (click)="onBack()"
+            class="text-blue-500 hover:text-blue-700 text-sm mb-3 flex items-center">
+      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      Back
+    </button>
+
+    <h2 class="text-2xl font-bold mb-2">Two-Factor Authentication</h2>
+    <p class="text-sm text-gray-600 mb-4">
+      Enter the 6-digit code sent to<br>
+      <strong>{{ pendingEmail }}</strong>
+    </p>
+
+    <div *ngIf="otpMessage" class="bg-green-50 text-green-700 text-sm p-2 rounded mb-3">
+      {{ otpMessage }}
+    </div>
+
+    <div *ngIf="otpError" class="bg-red-50 text-red-700 text-sm p-2 rounded mb-3">
+      {{ otpError }}
+    </div>
+
+    <input [(ngModel)]="otp"
+           placeholder="Enter 6-digit OTP"
+           maxlength="6"
+           class="w-full border p-3 mb-3 rounded text-center text-2xl tracking-widest"
+           (keyup.enter)="onSubmitOtp()">
+
+    <div *ngIf="countdown > 0" class="text-xs text-gray-500 mb-3 text-center">
+      Code expires in {{ countdown | number:'2.0-0' }}s
+    </div>
+
+    <button (click)="onSubmitOtp()"
+            class="bg-blue-600 text-white p-2 w-full rounded hover:bg-blue-700 mb-2">
+      Verify & Login
+    </button>
+
+    <button (click)="onResendOtp()"
+            class="w-full text-blue-500 text-sm hover:underline">
+      Resend Code
+    </button>
+  </div>
 
 </div>

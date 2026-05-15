@@ -28,7 +28,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let o of recentOrders" class="border-b hover:bg-gray-50">
+          <tr *ngFor="let o of recentOrders; let even = even" [class.bg-white]="even" [class.bg-gray-50]="!even" class="border-b hover:bg-gray-50">
             <td class="px-4 py-2">#{{ o.id }}</td>
             <td class="px-4 py-2">{{ o.customerName }}</td>
             <td class="px-4 py-2">

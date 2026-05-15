@@ -25,6 +25,8 @@ export class DashboardComponent implements OnInit {
   activeUsers = 0;
   inactiveUsers = 0;
 
+  pieGradient = '';
+
   user: any;
   isAdmin = false;
   isEmployee = false;
@@ -72,10 +74,41 @@ export class DashboardComponent implements OnInit {
 
    
     if (this.isAdmin) {
-      const allUsers = this.userService.getUsers();
-      this.activeUsers = allUsers.filter(u => u.status === 'active').length;
-      this.inactiveUsers = allUsers.filter(u => u.status === 'inactive').length;
-      this.users = allUsers.slice(0, 5);
+       const allUsers = this.userService.getUsers();
+       this.activeUsers = allUsers.filter(u => u.status === 'active').length;
+       this.inactiveUsers = allUsers.filter(u => u.status === 'inactive').length;
+       this.users = allUsers.slice(0, 5);
+     }
+
+     this.calculatePieGradient();
+   }
+
+   calculatePieGradient(): void {
+      const total = this.totalImprests || 1;
+      const approved = (this.approvedImprests / total) * 100;
+      const pending = (this.pendingImprests / total) * 100;
+      const rejected = (this.rejectedImprests / total) * 100;
+      const withdrawn = (this.withdrawnImprests / total) * 100;
+
+      const segments: string[] = [];
+      let current = 0;
+
+      if (approved > 0) {
+        segments.push(`#22c55e ${current}deg ${current + approved}deg`);
+        current += approved;
+      }
+      if (pending > 0) {
+        segments.push(`#eab308 ${current}deg ${current + pending}deg`);
+        current += pending;
+      }
+      if (rejected > 0) {
+        segments.push(`#ef4444 ${current}deg ${current + rejected}deg`);
+        current += rejected;
+      }
+      if (withdrawn > 0) {
+        segments.push(`#3b82f6 ${current}deg ${current + withdrawn}deg`);
+      }
+
+      this.pieGradient = `conic-gradient(${segments.join(', ')})`;
     }
-  }
 }

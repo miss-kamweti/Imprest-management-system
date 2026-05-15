@@ -25,8 +25,7 @@ export class InventoryService {
         costPrice: 1200,
         quantityOnHand: 50,
         reorderLevel: 10,
-        unit: 'pcs',
-        status: 'active'
+        unit: 'pcs'
       },
       {
         id: 2,
@@ -37,8 +36,7 @@ export class InventoryService {
         costPrice: 650,
         quantityOnHand: 5,
         reorderLevel: 20,
-        unit: 'ream',
-        status: 'active'
+        unit: 'ream'
       },
       {
         id: 3,
@@ -49,8 +47,106 @@ export class InventoryService {
         costPrice: 200,
         quantityOnHand: 25,
         reorderLevel: 15,
-        unit: 'box',
-        status: 'active'
+        unit: 'box'
+      },
+      {
+        id: 4,
+        sku: 'ELC-001',
+        name: 'Laptop Dell Latitude 5520',
+        category: 'Electronics',
+        unitPrice: 95000,
+        costPrice: 82000,
+        quantityOnHand: 12,
+        reorderLevel: 5,
+        unit: 'pcs'
+      },
+      {
+        id: 5,
+        sku: 'ELC-002',
+        name: 'Wireless Mouse',
+        category: 'Electronics',
+        unitPrice: 2500,
+        costPrice: 1800,
+        quantityOnHand: 40,
+        reorderLevel: 10,
+        unit: 'pcs'
+      },
+      {
+        id: 6,
+        sku: 'ELC-003',
+        name: 'USB-C Hub 7-in-1',
+        category: 'Electronics',
+        unitPrice: 4500,
+        costPrice: 3200,
+        quantityOnHand: 30,
+        reorderLevel: 8,
+        unit: 'pcs'
+      },
+      {
+        id: 7,
+        sku: 'FUR-001',
+        name: 'Ergonomic Office Chair',
+        category: 'Furniture',
+        unitPrice: 22000,
+        costPrice: 17000,
+        quantityOnHand: 8,
+        reorderLevel: 5,
+        unit: 'pcs'
+      },
+      {
+        id: 8,
+        sku: 'FUR-002',
+        name: 'Standing Desk 120cm',
+        category: 'Furniture',
+        unitPrice: 35000,
+        costPrice: 28000,
+        quantityOnHand: 6,
+        reorderLevel: 3,
+        unit: 'pcs'
+      },
+      {
+        id: 9,
+        sku: 'CLN-001',
+        name: 'Hand Sanitizer 500ml',
+        category: 'Cleaning',
+        unitPrice: 600,
+        costPrice: 380,
+        quantityOnHand: 100,
+        reorderLevel: 30,
+        unit: 'bottle'
+      },
+      {
+        id: 10,
+        sku: 'CLN-002',
+        name: 'Disinfectant Spray 750ml',
+        category: 'Cleaning',
+        unitPrice: 850,
+        costPrice: 550,
+        quantityOnHand: 60,
+        reorderLevel: 20,
+        unit: 'bottle'
+      },
+      {
+        id: 11,
+        sku: 'SNK-001',
+        name: 'Bottled Water 500ml',
+        category: 'Beverages',
+        unitPrice: 150,
+        costPrice: 90,
+        quantityOnHand: 200,
+        reorderLevel: 50,
+        unit: 'bottle'
+      },
+      {
+        id: 12,
+        sku: 'SNK-002',
+        name: 'Energy Drink 250ml',
+        category: 'Beverages',
+        unitPrice: 300,
+        costPrice: 180,
+        quantityOnHand: 150,
+        reorderLevel: 40,
+        unit: 'can'
       }
     ];
   }

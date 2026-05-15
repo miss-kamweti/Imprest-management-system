@@ -9,7 +9,6 @@ export interface Product {
   quantityOnHand: number;
   reorderLevel: number;
   unit: string;
-  status: 'active' | 'inactive';
 }
 
 export interface StockMovement {

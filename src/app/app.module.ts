@@ -1,20 +1,21 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
-
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { DashboardComponent } from './modules/dashboard/dashboard/dashboard.component';
-import { UserListComponent } from './modules/admin/pages/user-list/user-list.component';
-import { UserFormComponent } from './modules/admin/pages/user-list/user-form.component';
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
 import { ImprestModule } from './modules/imprest/imprest.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
 import { SalesModule } from './modules/sales/sales.module';
 
+import { DashboardComponent } from './modules/dashboard/dashboard/dashboard.component';
+import { UserListComponent } from './modules/admin/pages/user-list/user-list.component';
+import { UserFormComponent } from './modules/admin/pages/user-list/user-form.component';
+import { ImprestModalComponent } from './modules/imprest/components/imprest-modal.component';
 
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -42,6 +43,7 @@ import { LoginComponent } from './modules/auth/login/login.component';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
     ImprestModule,
     InventoryModule,
     SalesModule,

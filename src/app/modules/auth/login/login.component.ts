@@ -1,24 +1,50 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '../../../core/services/user.service';
-import { AuthService } from '../../../core/services/auth.service';
+import { UserService } from 'src/app/core/services/user.service';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { OtpService } from 'src/app/core/services/otp.service';
+import { User } from 'src/app/shared/models/user.model';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html'
 })
-export class LoginComponent {
-
+export class LoginComponent implements OnInit, OnDestroy {
   username = '';
   password = '';
+  otp = '';
+
+  step: 'credentials' | 'otp' = 'credentials';
+  pendingUser: User | null = null;
+  pendingEmail = '';
+  otpMessage = '';
+  otpError = '';
+  countdown = 0;
+  private countdownInterval: any;
 
   constructor(
     private router: Router,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private otpService: OtpService
   ) {}
 
-  login(): void {
+  ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/dashboard']);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+  }
+
+  /** Step 1 — validate username + password */
+  onSubmitCredentials(): void {
+    this.otpError = '';
+    this.otpMessage = '';
 
     const u = this.username.trim();
     const p = this.password;
@@ -28,75 +54,98 @@ export class LoginComponent {
       return;
     }
 
-  
-    if (u.toLowerCase() === 'kinuthia' && p === 'kinuthia123') {
-
-      localStorage.setItem('currentUser', JSON.stringify({
-        username: 'kinuthia',
-        role: 'admin'
-      }));
-
-      this.router.navigate(['/dashboard']);
-      return;
-    }
-
     const allUsers = this.userService.getUsers();
     const matchedUser = allUsers.find(
       user => user.username.toLowerCase() === u.toLowerCase()
     );
 
-    if (matchedUser) {
-      this.authService.setUser({
-        id: matchedUser.id,
-        username: matchedUser.username,
-        email: matchedUser.email,
-        role: matchedUser.role,
-        permissions: matchedUser.permissions,
-        department: matchedUser.department,
-        status: matchedUser.status
-      });
-
-      if (matchedUser.role === 'admin') {
-        this.router.navigate(['/dashboard']);
-      } else if (matchedUser.role === 'hr') {
-        this.router.navigate(['/users']);
-      } else {
-        this.router.navigate(['/request-imprest']);
-      }
+    if (!matchedUser || matchedUser.password !== p) {
+      alert('Invalid username or password');
       return;
     }
 
-   
-    const newId = Math.max(...this.userService.getUsers().map(usr => usr.id), 0) + 1;
-    this.userService.addUser({
-      id: newId,
-      username: u,
-      email: `${u.toLowerCase()}@company.com`,
-      role: 'employee',
-      permissions: ['imprest_request'],
-      department: 'Unknown',
-      status: 'active'
-    });
+    // Credentials valid — move to OTP step
+    this.pendingUser = matchedUser;
+    this.pendingEmail = matchedUser.email;
+    this.step = 'otp';
 
-    const newUser = this.userService.getUsers().find(
-      user => user.username.toLowerCase() === u.toLowerCase()
-    );
+    // Send OTP to the user's registered email
+    const sentOtp = this.otpService.sendOtpEmail(matchedUser.email);
+    this.otpMessage = `OTP sent to ${matchedUser.email}`;
+    console.log('Your OTP is:', sentOtp); // dev convenience
 
-    if (newUser) {
-      this.authService.setUser(newUser);
-    } else {
-      // Fallback: set user directly
-      this.authService.setUser({
-        id: Date.now(),
-        username: u,
-        email: `${u.toLowerCase()}@wholesalers.com`,
-        role: 'employee',
-        permissions: ['imprest_request'],
-        department: 'Unknown',
-        status: 'active'
-      });
+    this.startCountdown();
+  }
+
+  /** Step 2 — verify OTP and complete login */
+  onSubmitOtp(): void {
+    this.otpError = '';
+
+    if (!this.otp || this.otp.length !== 6) {
+      this.otpError = 'Please enter the 6-digit OTP code';
+      return;
     }
 
-    this.router.navigate(['/request-imprest']);
+    const isValid = this.otpService.verifyOtp(this.pendingEmail, this.otp);
+
+    if (!isValid) {
+      this.otpError = 'Invalid or expired OTP. Please try again.';
+      return;
+    }
+
+    // OTP verified — complete login
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+
+    this.authService.setUser({
+      id: this.pendingUser!.id,
+      username: this.pendingUser!.username,
+      email: this.pendingUser!.email,
+      password: this.pendingUser!.password,
+      role: this.pendingUser!.role,
+      permissions: this.pendingUser!.permissions,
+      department: this.pendingUser!.department,
+      status: this.pendingUser!.status
+    });
+
+    this.router.navigate(['/dashboard']);
+  }
+
+  /** Resend a fresh OTP */
+  onResendOtp(): void {
+    this.otpError = '';
+    const sentOtp = this.otpService.resendOtp(this.pendingEmail);
+    this.otpMessage = `New OTP sent to ${this.pendingEmail}`;
+    console.log('Your new OTP is:', sentOtp);
+    this.otp = '';
+    this.startCountdown();
+  }
+
+  /** Go back to credentials step */
+  onBack(): void {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+    this.step = 'credentials';
+    this.otp = '';
+    this.otpMessage = '';
+    this.otpError = '';
+    this.pendingUser = null;
+    this.countdown = 0;
+  }
+
+  private startCountdown(): void {
+    this.countdown = 300; // 5 minutes in seconds
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+    this.countdownInterval = setInterval(() => {
+      this.countdown--;
+      if (this.countdown <= 0) {
+        clearInterval(this.countdownInterval);
+        this.otpError = 'OTP expired. Please request a new code.';
+      }
+    }, 1000);
   }
 }

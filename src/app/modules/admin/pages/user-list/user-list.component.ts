@@ -153,4 +153,8 @@ export class UserListComponent implements OnInit {
   get roles(): string[] {
     return ['admin', 'manager', 'employee', 'hr', 'accountant'];
   }
+
+  getMaxDisplayed(): number {
+    return Math.min((this.currentPage + 1) * this.pageSize, this.totalUsers);
+  }
 }

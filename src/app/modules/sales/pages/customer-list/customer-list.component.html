@@ -1,6 +1,13 @@
 <div class="p-6">
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-2xl font-bold text-gray-800">Customers</h2>
+    <a
+      [routerLink]="['/sales']"
+      [queryParams]="{pendingOrders: 'true'}"
+      class="bg-yellow-500 text-white px-4 py-2 rounded text-sm hover:bg-yellow-600"
+    >
+      Pending Orders
+    </a>
   </div>
 
   <!-- CUSTOMER LIST -->
@@ -11,7 +18,7 @@
           <th class="py-3 px-6">Name</th>
           <th class="py-3 px-6">Email</th>
           <th class="py-3 px-6">Phone</th>
-          <th class="py-3 px-6">Status</th>
+          <th class="py-3 px-6">Address</th>
           <th class="py-3 px-6 text-center">Actions</th>
         </tr>
       </thead>
@@ -19,7 +26,9 @@
       <tbody class="text-gray-600 text-sm font-light">
 
         <tr
-          *ngFor="let customer of customers"
+          *ngFor="let customer of customers; let even = even"
+          [class.bg-white]="even"
+          [class.bg-gray-50]="!even"
           class="border-b border-gray-200 hover:bg-gray-100"
         >
           <td class="py-3 px-6">
@@ -37,29 +46,19 @@
           </td>
 
           <td class="py-3 px-6">
-
-            <span
-              *ngIf="customer?.status === 'active'"
-              class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs"
-            >
-              Active
-            </span>
-
-            <span
-              *ngIf="customer?.status === 'inactive'"
-              class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs"
-            >
-              Inactive
-            </span>
-
+            {{ customer?.address }}
           </td>
 
           <td class="py-3 px-6 text-center">
             <button
               (click)="viewDetails(customer)"
               class="text-blue-500 hover:text-blue-700"
+              title="View Purchases"
             >
-              View Details
+              <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
             </button>
           </td>
         </tr>
@@ -74,7 +73,7 @@
     </table>
   </div>
 
-  <!-- CUSTOMER DETAILS -->
+  <!-- CUSTOMER PURCHASE DETAILS -->
   <div
     *ngIf="selectedCustomer as customer"
     class="bg-white rounded-lg shadow p-6"
@@ -113,82 +112,66 @@
       </p>
 
       <p class="text-gray-600">
-        {{ customer?.address }}
+        {{ customer?.address }} |
+        Credit Limit: KES {{ customer?.creditLimit | number }}
       </p>
     </div>
 
-    <!-- INVOICES -->
+    <!-- ORDERS & PRODUCTS -->
     <h4 class="text-lg font-semibold mb-3">
-      Invoices
+      Purchase History
     </h4>
 
-    <div class="overflow-x-auto">
+    <div *ngIf="customerOrders.length === 0" class="text-gray-500 text-sm py-4 text-center">
+      No orders found for this customer.
+    </div>
 
-      <table class="w-full text-left border-collapse">
+    <div *ngFor="let order of customerOrders" class="mb-6 border rounded-lg overflow-hidden">
+      <!-- ORDER HEADER -->
+      <div class="bg-gray-50 px-4 py-2 flex justify-between items-center">
+        <div>
+          <span class="font-semibold text-sm">Order #{{ order.id }}</span>
+          <span class="text-gray-500 text-xs ml-2">{{ order.orderDate }}</span>
+        </div>
+        <div class="flex gap-2">
+          <span
+            class="px-2 py-0.5 rounded-full text-xs font-medium"
+            [class]="isPaid(order) ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'"
+          >
+            {{ isPaid(order) ? 'Paid' : 'Unpaid' }}
+          </span>
+          <span
+            class="px-2 py-0.5 rounded-full text-xs font-medium"
+            [class]="isDelivered(order) ? 'bg-blue-100 text-blue-800' : 'bg-orange-100 text-orange-800'"
+          >
+            {{ isDelivered(order) ? 'Delivered' : 'Pending Delivery' }}
+          </span>
+        </div>
+      </div>
 
-        <thead>
-          <tr class="bg-gray-100 text-gray-600 uppercase text-xs leading-normal">
-            <th class="py-2 px-4">Invoice #</th>
-            <th class="py-2 px-4">Date</th>
-            <th class="py-2 px-4">Due Date</th>
-            <th class="py-2 px-4 text-right">Amount</th>
-            <th class="py-2 px-4">Status</th>
+      <!-- ORDER ITEMS -->
+      <table class="w-full text-sm">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+            <th class="py-2 px-4 text-right text-xs font-medium text-gray-500 uppercase">Qty</th>
+            <th class="py-2 px-4 text-right text-xs font-medium text-gray-500 uppercase">Unit Price</th>
+            <th class="py-2 px-4 text-right text-xs font-medium text-gray-500 uppercase">Total</th>
           </tr>
         </thead>
-
-        <tbody class="text-sm font-light">
-
-          <tr
-            *ngFor="let invoice of customerInvoices"
-            class="border-b border-gray-200 hover:bg-gray-50"
-          >
-
-            <td class="py-2 px-4 font-medium">
-              {{ invoice?.invoiceNumber }}
-            </td>
-
-            <td class="py-2 px-4">
-              {{ invoice?.invoiceDate }}
-            </td>
-
-            <td class="py-2 px-4">
-              {{ invoice?.dueDate }}
-            </td>
-
-            <td class="py-2 px-4 text-right font-semibold">
-              KES {{ invoice?.total | number }}
-            </td>
-
-            <td class="py-2 px-4">
-
-              <span
-                class="px-2 py-1 rounded-full text-xs"
-                [ngClass]="{
-                  'bg-green-100 text-green-800': invoice?.status === 'paid',
-                  'bg-yellow-100 text-yellow-800':
-                    invoice?.status === 'sent' ||
-                    invoice?.status === 'draft',
-                  'bg-red-100 text-red-800':
-                    invoice?.status === 'overdue'
-                }"
-              >
-                {{ invoice?.status | titlecase }}
-              </span>
-
-            </td>
-
+        <tbody>
+          <tr *ngFor="let item of order.items; let even = even" [class.bg-white]="even" [class.bg-gray-50]="!even" class="border-b border-gray-100 hover:bg-gray-50">
+            <td class="py-2 px-4">{{ item.productName }}</td>
+            <td class="py-2 px-4 text-right">{{ item.quantity }}</td>
+            <td class="py-2 px-4 text-right">KES {{ item.unitPrice | number:'1.0-0' }}</td>
+            <td class="py-2 px-4 text-right font-semibold">KES {{ item.total | number:'1.0-0' }}</td>
           </tr>
-
-          <tr *ngIf="customerInvoices.length === 0">
-            <td colspan="5" class="py-4 text-center text-gray-500">
-              No invoices found for this customer.
-            </td>
+          <tr class="bg-gray-50">
+            <td colspan="3" class="py-2 px-4 text-right font-semibold">Order Total</td>
+            <td class="py-2 px-4 text-right font-bold text-green-600">KES {{ order.total | number:'1.0-0' }}</td>
           </tr>
-
         </tbody>
-
       </table>
-
     </div>
   </div>
 </div>

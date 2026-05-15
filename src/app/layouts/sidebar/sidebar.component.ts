@@ -7,6 +7,17 @@ import { AuthService } from 'src/app/core/services/auth.service';
   templateUrl: './sidebar.component.html'
 })
 export class SidebarComponent {
+  // Modal state for Imprest actions
+  showImprestModal = false;
+  imprestModalType: 'pending' | 'request' | 'withdraw' | 'approved' | 'rejected' | 'actions' = 'pending';
+  openImprestModal(type: 'pending' | 'request' | 'withdraw' | 'approved' | 'rejected' | 'actions') {
+    this.imprestModalType = type;
+    this.showImprestModal = true;
+  }
+
+  closeImprestModal() {
+    this.showImprestModal = false;
+  }
 
   showEmployeeActions = false;
   showUserManagement = false;

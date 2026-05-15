@@ -1,48 +1,72 @@
-<div class="p-6">
-  <h2 class="text-2xl font-bold mb-4">{{ isLowStockView ? 'Low Stock Alerts' : 'Inventory Dashboard' }}</h2>
-  <div *ngIf="!isLowStockView" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-    <div class="bg-white rounded-lg shadow p-4">
-      <h3 class="text-lg font-semibold mb-2">Total Products</h3>
-      <p class="text-2xl font-bold text-blue-600">{{ totalProducts }}</p>
+<div class="p-4 space-y-3">
+  <div class="flex justify-between items-center">
+    <h2 class="text-xl font-bold">Inventory Dashboard</h2>
+    <button
+      class="bg-blue-600 text-white px-3 py-1.5 rounded text-sm hover:bg-blue-700"
+      (click)="openAddModal()"
+    >
+      + Add Product
+    </button>
+  </div>
+
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+    <div class="rounded-lg shadow p-3 bg-blue-50">
+      <h3 class="text-xs font-semibold text-gray-600 mb-1">Total Products</h3>
+      <p class="text-xl font-bold text-blue-600">{{ totalProducts }}</p>
     </div>
-    <div class="bg-white rounded-lg shadow p-4">
-      <h3 class="text-lg font-semibold mb-2">Low Stock Items</h3>
-      <p class="text-2xl font-bold text-yellow-600">{{ lowStockCount }}</p>
+    <div class="rounded-lg shadow p-3 bg-yellow-50">
+      <h3 class="text-xs font-semibold text-gray-600 mb-1">Low Stock Items</h3>
+      <p class="text-xl font-bold text-yellow-600">{{ lowStockCount }}</p>
     </div>
-    <div class="bg-white rounded-lg shadow p-4">
-      <h3 class="text-lg font-semibold mb-2">Out of Stock</h3>
-      <p class="text-2xl font-bold text-red-600">{{ outOfStockCount }}</p>
+    <div class="rounded-lg shadow p-3 bg-red-50">
+      <h3 class="text-xs font-semibold text-gray-600 mb-1">Out of Stock</h3>
+      <p class="text-xl font-bold text-red-600">{{ outOfStockCount }}</p>
     </div>
-    <div class="bg-white rounded-lg shadow p-4">
-      <h3 class="text-lg font-semibold mb-2">Total Value</h3>
-      <p class="text-2xl font-bold text-green-600">KES {{ totalValue }}</p>
+    <div class="rounded-lg shadow p-3 bg-green-50">
+      <h3 class="text-xs font-semibold text-gray-600 mb-1">Total Value</h3>
+      <p class="text-xl font-bold text-green-600">KES {{ totalValue }}</p>
     </div>
   </div>
-  
-  <div class="bg-white rounded-lg shadow p-6">
-    <h3 class="text-lg font-semibold mb-4">Low Stock Alerts</h3>
-    <div class="space-y-4">
-      <table class="w-full text-sm">
+
+  <div class="rounded-lg shadow overflow-hidden">
+    <div class="px-3 py-2 border-b">
+      <h3 class="text-sm font-semibold text-gray-700">All Products</h3>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
         <thead class="bg-gray-50">
           <tr>
-            <th class="px-4 py-2 text-left">Product</th>
-            <th class="px-4 py-2 text-left">Category</th>
-            <th class="px-4 py-2 text-right">Qty</th>
-            <th class="px-4 py-2 text-right">Reorder</th>
+            <th class="px-2 py-1.5 text-left text-[10px] font-medium text-gray-500 uppercase">SKU</th>
+            <th class="px-2 py-1.5 text-left text-[10px] font-medium text-gray-500 uppercase">Product</th>
+            <th class="px-2 py-1.5 text-left text-[10px] font-medium text-gray-500 uppercase">Category</th>
+            <th class="px-2 py-1.5 text-right text-[10px] font-medium text-gray-500 uppercase">Qty</th>
+            <th class="px-2 py-1.5 text-right text-[10px] font-medium text-gray-500 uppercase">Reorder</th>
+            <th class="px-2 py-1.5 text-right text-[10px] font-medium text-gray-500 uppercase">Cost Price</th>
+            <th class="px-2 py-1.5 text-right text-[10px] font-medium text-gray-500 uppercase">Selling Price</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let p of lowStockProducts" class="border-b hover:bg-gray-50">
-            <td class="px-4 py-2">{{ p.name }}</td>
-            <td class="px-4 py-2">{{ p.category }}</td>
-            <td class="px-4 py-2 text-right">{{ p.quantityOnHand }}</td>
-            <td class="px-4 py-2 text-right">{{ p.reorderLevel }}</td>
+          <tr *ngFor="let p of products; let even = even" [class.bg-white]="even" [class.bg-gray-50]="!even" class="border-b hover:bg-gray-50" [ngClass]="{'bg-red-50': p.quantityOnHand <= p.reorderLevel}">
+            <td class="px-2 py-1 text-xs text-gray-700">{{ p.sku }}</td>
+            <td class="px-2 py-1 text-xs text-gray-700">{{ p.name }}</td>
+            <td class="px-2 py-1 text-xs text-gray-500">{{ p.category }}</td>
+            <td class="px-2 py-1 text-xs text-right" [ngClass]="{'text-red-600 font-semibold': p.quantityOnHand <= p.reorderLevel}">{{ p.quantityOnHand }}</td>
+            <td class="px-2 py-1 text-xs text-right">{{ p.reorderLevel }}</td>
+            <td class="px-2 py-1 text-xs text-right text-gray-600">KES {{ p.costPrice | number:'1.0-0' }}</td>
+            <td class="px-2 py-1 text-xs text-right text-green-600 font-semibold">KES {{ p.unitPrice | number:'1.0-0' }}</td>
           </tr>
-          <tr *ngIf="lowStockProducts.length === 0">
-            <td colspan="4" class="px-4 py-4 text-center text-gray-500">All items adequately stocked</td>
+          <tr *ngIf="products.length === 0">
+            <td colspan="7" class="px-4 py-4 text-center text-gray-400 text-xs">No products found</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
+
+<!-- Add Product Modal -->
+<app-product-modal
+  *ngIf="showAddModal"
+  (close)="closeAddModal()"
+  (save)="onProductSaved($any($event))"
+></app-product-modal>

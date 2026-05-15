@@ -29,7 +29,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let order of pendingOrders" class="hover:bg-yellow-50">
+          <tr *ngFor="let order of pendingOrders; let even = even" [class.bg-white]="even" [class.bg-gray-50]="!even" class="hover:bg-yellow-50">
             <td class="border border-gray-300 px-4 py-2 font-semibold">#{{ order.id }}</td>
             <td class="border border-gray-300 px-4 py-2">{{ order.customerName }}</td>
             <td class="border border-gray-300 px-4 py-2">{{ order.orderDate | date: 'short' }}</td>

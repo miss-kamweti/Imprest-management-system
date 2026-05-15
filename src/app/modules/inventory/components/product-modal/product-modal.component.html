@@ -1,0 +1,136 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)"></div>
+<div class="modal-content">
+  <button class="close-btn" (click)="onClose()">&times;</button>
+  <h2 class="text-lg font-bold mb-4">Add New Product</h2>
+  <form (ngSubmit)="onSave()" class="space-y-3">
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">SKU</label>
+        <input
+          type="text"
+          [(ngModel)]="product.sku"
+          name="sku"
+          required
+          class="w-full border rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="e.g. ELC-004"
+        />
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Category</label>
+        <select
+          [(ngModel)]="product.category"
+          name="category"
+          required
+          class="w-full border rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Select category</option>
+          <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-xs font-medium text-gray-600 mb-1">Product Name</label>
+      <input
+        type="text"
+        [(ngModel)]="product.name"
+        name="name"
+        required
+        class="w-full border rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter product name"
+      />
+    </div>
+
+    <div>
+      <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
+      <input
+        type="text"
+        [(ngModel)]="product.description"
+        name="description"
+        class="w-full border rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Optional description"
+      />
+    </div>
+
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Cost Price (KES)</label>
+        <input
+          type="number"
+          [(ngModel)]="product.costPrice"
+          name="costPrice"
+          required
+          min="0"
+          class="w-full border rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="0"
+        />
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Selling Price (KES)</label>
+        <input
+          type="number"
+          [(ngModel)]="product.unitPrice"
+          name="unitPrice"
+          required
+          min="0"
+          class="w-full border rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="0"
+        />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Quantity on Hand</label>
+        <input
+          type="number"
+          [(ngModel)]="product.quantityOnHand"
+          name="quantityOnHand"
+          required
+          min="0"
+          class="w-full border rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="0"
+        />
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Reorder Level</label>
+        <input
+          type="number"
+          [(ngModel)]="product.reorderLevel"
+          name="reorderLevel"
+          required
+          min="0"
+          class="w-full border rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="0"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-xs font-medium text-gray-600 mb-1">Unit</label>
+      <select
+        [(ngModel)]="product.unit"
+        name="unit"
+        class="w-full border rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option *ngFor="let u of units" [value]="u">{{ u }}</option>
+      </select>
+    </div>
+
+    <div class="flex justify-end gap-2 pt-2">
+      <button
+        type="button"
+        (click)="onClose()"
+        class="px-3 py-1.5 text-sm border rounded hover:bg-gray-50"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="px-3 py-1.5 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        Add Product
+      </button>
+    </div>
+  </form>
+</div>

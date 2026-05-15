@@ -45,7 +45,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let pw of pendingWithdrawalList" class="border-b hover:bg-gray-50">
+          <tr *ngFor="let pw of pendingWithdrawalList; let even = even" [class.bg-white]="even" [class.bg-gray-50]="!even" class="border-b hover:bg-gray-50">
             <td class="px-4 py-2 text-sm text-gray-700">{{ pw.employeeName }}</td>
             <td class="px-4 py-2 text-sm">KES {{ pw.formattedPendingAmount }}</td>
             <td class="px-4 py-2 text-sm text-gray-500">{{ pw.withdrawalReason }}</td>
@@ -89,7 +89,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let imp of recentImprests" class="border-b hover:bg-gray-50">
+          <tr *ngFor="let imp of recentImprests; let even = even" [class.bg-white]="even" [class.bg-gray-50]="!even" class="border-b hover:bg-gray-50">
             <td class="px-4 py-2 text-sm text-gray-700">{{ imp.employeeName }}</td>
             <td class="px-4 py-2 text-sm">KES {{ imp.formattedAmount }}</td>
             <td class="px-4 py-2 text-sm text-gray-500">{{ imp.purpose }}</td>

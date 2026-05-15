@@ -5,7 +5,6 @@ export interface Customer {
   phone: string;
   address: string;
   creditLimit: number;
-  status: 'active' | 'inactive';
 }
 
 export interface SalesOrder {

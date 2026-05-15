@@ -59,14 +59,18 @@ export class ImprestListComponent implements OnInit {
   }
 
   approve(id: number): void {
-    this.service.updateStatus(id, 'Approved');
-    this.loadImprests();
-  }
+     if (confirm('Are you sure you want to approve this imprest request?')) {
+       this.service.updateStatus(id, 'Approved');
+       this.loadImprests();
+     }
+   }
 
-  reject(id: number): void {
-    this.service.updateStatus(id, 'Rejected');
-    this.loadImprests();
-  }
+   reject(id: number): void {
+     if (confirm('Are you sure you want to reject this imprest request?')) {
+       this.service.updateStatus(id, 'Rejected');
+       this.loadImprests();
+     }
+   }
 
   // Calculate remaining balance for an imprest
   getRemainingForImprest(imprest: any): number {
@@ -79,7 +83,7 @@ export class ImprestListComponent implements OnInit {
   }
 
   // Navigate to withdraw page
-  navigateToWithdraw(imprest: any): void {
-    this.router.navigate(['/withdraw-imprest']);
-  }
+   navigateToWithdraw(imprest: any): void {
+     this.router.navigate(['/withdraw-imprest']);
+   }
 }

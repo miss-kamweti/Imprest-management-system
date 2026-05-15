@@ -1,181 +1,150 @@
-<div class="p-6 space-y-6">
+<div class="p-3 space-y-2">
 
 
   <div class="flex justify-between items-center">
     <div>
       <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
-      <p class="text-sm text-gray-500 mt-1">Welcome back, {{ user?.username }} — here's an overview of your imprest activity.</p>
-    </div>
-    <div *ngIf="isAdmin" class="text-sm text-gray-500">
-      <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-semibold">Admin View</span>
+      <p class="text-sm text-gray-500 mt-1">Welcome back, {{ user?.username }} </p>
     </div>
   </div>
 
- 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-    <div class="bg-white rounded-lg shadow p-5 border-l-4 border-blue-500">
-      <div class="flex justify-between items-center">
-        <div>
-          <p class="text-sm text-gray-500 uppercase font-semibold">Total Imprests</p>
-          <p class="text-3xl font-bold text-gray-800 mt-1">{{ totalImprests }}</p>
-        </div>
-        <div class="bg-blue-100 p-3 rounded-full">
-          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V6m0 12a9 9 0 100-18 9 9 0 000 18z"/>
-          </svg>
-        </div>
-      </div>
-      <p class="text-xs text-gray-400 mt-2">KES {{ totalApprovedAmount | number }} total approved value</p>
-    </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
 
-    <div class="bg-white rounded-lg shadow p-5 border-l-4 border-yellow-500">
-      <div class="flex justify-between items-center">
-        <div>
-          <p class="text-sm text-gray-500 uppercase font-semibold">Pending Approval</p>
-          <p class="text-3xl font-bold text-yellow-600 mt-1">{{ pendingImprests }}</p>
-        </div>
-        <div class="bg-yellow-100 p-3 rounded-full">
-          <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/>
-          </svg>
-        </div>
-      </div>
-      <p class="text-xs text-gray-400 mt-2">KES {{ totalPendingAmount | number }} awaiting approval</p>
-    </div>
+    <div class="rounded-lg shadow p-2 bg-blue-50">
+       <div class="flex justify-between items-center">
+         <div>
+           <p class="text-xs text-gray-500 uppercase font-semibold">Total Imprests</p>
+           <p class="text-xl font-bold text-gray-800">{{ totalImprests }}</p>
+         </div>
+       </div>
+       <p class="text-xs text-gray-400 mt-0.5">KES {{ totalApprovedAmount | number }} total approved value</p>
+     </div>
 
-    <div class="bg-white rounded-lg shadow p-5 border-l-4 border-green-500">
-      <div class="flex justify-between items-center">
-        <div>
-          <p class="text-sm text-gray-500 uppercase font-semibold">Approved & Active</p>
-          <p class="text-3xl font-bold text-green-600 mt-1">{{ approvedImprests }}</p>
-        </div>
-        <div class="bg-green-100 p-3 rounded-full">
-          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-        </div>
-      </div>
-      <p class="text-xs text-gray-400 mt-2">KES {{ totalWithdrawnAmount | number }} total withdrawn</p>
-    </div>
+    <div class="rounded-lg shadow p-2 bg-yellow-50">
+       <div class="flex justify-between items-center">
+         <div>
+           <p class="text-xs text-gray-500 uppercase font-semibold">Pending Approval</p>
+           <p class="text-xl font-bold text-yellow-600">{{ pendingImprests }}</p>
+         </div>
+       </div>
+       <p class="text-xs text-gray-400 mt-0.5">KES {{ totalPendingAmount | number }} awaiting approval</p>
+     </div>
+
+    <div class="rounded-lg shadow p-2 bg-green-50">
+       <div class="flex justify-between items-center">
+         <div>
+           <p class="text-xs text-gray-500 uppercase font-semibold">Approved & Active</p>
+           <p class="text-xl font-bold text-green-600">{{ approvedImprests }}</p>
+         </div>
+       </div>
+       <p class="text-xs text-gray-400 mt-0.5">KES {{ totalWithdrawnAmount | number }} total withdrawn</p>
+     </div>
 
   </div>
 
-  <div *ngIf="isAdmin" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div *ngIf="isAdmin" class="grid grid-cols-1 lg:grid-cols-2 gap-2">
 
-  
-    <div class="bg-white rounded-lg shadow p-5">
-      <h3 class="text-lg font-semibold text-gray-700 mb-4">Imprest Status Breakdown</h3>
-      <div class="space-y-3">
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Approved</span>
-          <div class="flex items-center gap-3">
-            <div class="w-32 bg-green-200 rounded-full h-2.5">
-              <div class="bg-green-600 h-2.5 rounded-full" [style.width.%]="approvedImprests / totalImprests * 100 || 0"></div>
-            </div>
-            <span class="text-sm font-medium text-gray-700">{{ approvedImprests }}</span>
-          </div>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Pending</span>
-          <div class="flex items-center gap-3">
-            <div class="w-32 bg-yellow-200 rounded-full h-2.5">
-              <div class="bg-yellow-500 h-2.5 rounded-full" [style.width.%]="pendingImprests / totalImprests * 100 || 0"></div>
-            </div>
-            <span class="text-sm font-medium text-gray-700">{{ pendingImprests }}</span>
-          </div>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Rejected</span>
-          <div class="flex items-center gap-3">
-            <div class="w-32 bg-red-200 rounded-full h-2.5">
-              <div class="bg-red-500 h-2.5 rounded-full" [style.width.%]="rejectedImprests / totalImprests * 100 || 0"></div>
-            </div>
-            <span class="text-sm font-medium text-gray-700">{{ rejectedImprests }}</span>
-          </div>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Withdrawn</span>
-          <div class="flex items-center gap-3">
-            <div class="w-32 bg-blue-200 rounded-full h-2.5">
-              <div class="bg-blue-500 h-2.5 rounded-full" [style.width.%]="withdrawnImprests / totalImprests * 100 || 0"></div>
-            </div>
-            <span class="text-sm font-medium text-gray-700">{{ withdrawnImprests }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="rounded-lg shadow p-2">
+       <h3 class="text-xs font-semibold text-gray-700 mb-1.5">Imprest Status Breakdown</h3>
+       <div class="flex items-center gap-3">
+         <div class="relative w-24 h-24 flex-shrink-0">
+           <div class="w-24 h-24 rounded-full" [style.background]="pieGradient"></div>
+           <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+             <span class="text-sm font-bold text-gray-700">{{ totalImprests }}</span>
+           </div>
+         </div>
+         <div class="space-y-1 flex-1">
+           <div class="flex items-center gap-1.5">
+             <span class="w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></span>
+             <span class="text-[10px] text-gray-600">Approved <span class="font-medium">({{ approvedImprests }})</span></span>
+           </div>
+           <div class="flex items-center gap-1.5">
+             <span class="w-2 h-2 rounded-full bg-yellow-500 flex-shrink-0"></span>
+             <span class="text-[10px] text-gray-600">Pending <span class="font-medium">({{ pendingImprests }})</span></span>
+           </div>
+           <div class="flex items-center gap-1.5">
+             <span class="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></span>
+             <span class="text-[10px] text-gray-600">Rejected <span class="font-medium">({{ rejectedImprests }})</span></span>
+           </div>
+           <div class="flex items-center gap-1.5">
+             <span class="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0"></span>
+             <span class="text-[10px] text-gray-600">Withdrawn <span class="font-medium">({{ withdrawnImprests }})</span></span>
+           </div>
+         </div>
+       </div>
+     </div>
 
-   
-    <div class="bg-white rounded-lg shadow p-5">
-      <h3 class="text-lg font-semibold text-gray-700 mb-4">User Overview</h3>
-      <div class="flex gap-4 mb-4">
-        <div class="flex-1 p-3 bg-green-50 rounded-lg text-center">
-          <p class="text-2xl font-bold text-green-600">{{ activeUsers }}</p>
-          <p class="text-xs text-gray-500">Active Users</p>
+
+     <div class="rounded-lg shadow p-2">
+        <h3 class="text-xs font-semibold text-gray-700 mb-1.5">User Overview</h3>
+        <div class="flex gap-1 mb-1.5">
+          <div class="flex-1 p-1.5 bg-green-50 rounded-lg text-center">
+            <p class="text-sm font-bold text-green-600">{{ activeUsers }}</p>
+            <p class="text-[10px] text-gray-500">Active Users</p>
+          </div>
+          <div class="flex-1 p-1.5 bg-red-50 rounded-lg text-center">
+            <p class="text-sm font-bold text-red-600">{{ inactiveUsers }}</p>
+            <p class="text-[10px] text-gray-500">Inactive Users</p>
+          </div>
         </div>
-        <div class="flex-1 p-3 bg-red-50 rounded-lg text-center">
-          <p class="text-2xl font-bold text-red-600">{{ inactiveUsers }}</p>
-          <p class="text-xs text-gray-500">Inactive Users</p>
-        </div>
-      </div>
-      <div class="border-t pt-3">
-        <p class="text-xs text-gray-500 uppercase font-semibold mb-2">Recent Users</p>
-        <div class="space-y-2">
-          <div *ngFor="let u of users" class="flex justify-between items-center text-sm">
-            <span class="text-gray-700">{{ u.username }}</span>
-            <span class="text-gray-400">{{ u.role }}</span>
+        <div class="border-t pt-1.5">
+          <p class="text-[10px] text-gray-500 uppercase font-semibold mb-1">Recent Users</p>
+          <div class="space-y-0.5">
+            <div *ngFor="let u of users" class="flex justify-between items-center text-[10px]">
+              <span class="text-gray-700">{{ u.username }}</span>
+              <span class="text-gray-400">{{ u.role }}</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
   </div>
 
 
-  <div class="bg-white rounded-lg shadow overflow-hidden">
-    <div class="p-5 border-b">
-      <h3 class="text-lg font-semibold text-gray-700">{{ isAdmin ? 'Recent Imprest Requests' : 'Your Recent Imprests' }}</h3>
-    </div>
-    <div class="overflow-x-auto">
-      <table class="w-full">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Employee</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Purpose</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let imp of recentImprests" class="border-b hover:bg-gray-50">
-            <td class="px-4 py-2 text-sm text-gray-700">{{ imp.employeeName }}</td>
-            <td class="px-4 py-2 text-sm">KES {{ imp.amount | number }}</td>
-            <td class="px-4 py-2 text-sm text-gray-500">{{ imp.purpose }}</td>
-            <td class="px-4 py-2 text-sm">{{ imp.date | date:'mediumDate' }}</td>
-            <td class="px-4 py-2">
-              <span
-                class="px-2 py-0.5 rounded-full text-xs font-semibold"
-                [ngClass]="{
-                  'bg-yellow-100 text-yellow-500': imp.status === 'Pending',
-                  'bg-green-100 text-green-500': imp.status === 'Approved',
-                  'bg-red-100 text-red-500': imp.status === 'Rejected',
-                  'bg-blue-100 text-blue-500': imp.status === 'Withdrawn'
-                }"
-              >
-                {{ imp.status }}
-              </span>
-            </td>
-          </tr>
-          <tr *ngIf="recentImprests.length === 0">
-            <td colspan="5" class="px-4 py-6 text-center text-gray-400 text-sm">
-              No imprest requests yet
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <div class="rounded-lg shadow overflow-hidden">
+     <div class="px-3 py-2 border-b">
+       <h3 class="text-sm font-semibold text-gray-700">{{ isAdmin ? 'Recent Imprest Requests' : 'Your Recent Imprests' }}</h3>
+     </div>
+     <div class="overflow-x-auto">
+       <table class="w-full">
+         <thead class="bg-gray-50">
+           <tr>
+             <th class="px-2 py-1.5 text-left text-[10px] font-medium text-gray-500 uppercase">Employee</th>
+             <th class="px-2 py-1.5 text-left text-[10px] font-medium text-gray-500 uppercase">Amount</th>
+             <th class="px-2 py-1.5 text-left text-[10px] font-medium text-gray-500 uppercase">Purpose</th>
+             <th class="px-2 py-1.5 text-left text-[10px] font-medium text-gray-500 uppercase">Date</th>
+             <th class="px-2 py-1.5 text-left text-[10px] font-medium text-gray-500 uppercase">Status</th>
+           </tr>
+         </thead>
+         <tbody>
+           <tr *ngFor="let imp of recentImprests; let even = even" [class.bg-white]="even" [class.bg-gray-50]="!even" class="border-b hover:bg-gray-50">
+             <td class="px-2 py-1 text-xs text-gray-700">{{ imp.employeeName }}</td>
+             <td class="px-2 py-1 text-xs">KES {{ imp.amount | number }}</td>
+             <td class="px-2 py-1 text-xs text-gray-500">{{ imp.purpose }}</td>
+             <td class="px-2 py-1 text-xs">{{ imp.date | date:'mediumDate' }}</td>
+             <td class="px-2 py-1">
+               <span
+                 class="px-1 py-0.5 rounded-full text-[10px] font-semibold"
+                 [ngClass]="{
+                   'bg-yellow-100 text-yellow-500': imp.status === 'Pending',
+                   'bg-green-100 text-green-500': imp.status === 'Approved',
+                   'bg-red-100 text-red-500': imp.status === 'Rejected',
+                   'bg-blue-100 text-blue-500': imp.status === 'Withdrawn'
+                 }"
+               >
+                 {{ imp.status }}
+               </span>
+             </td>
+           </tr>
+           <tr *ngIf="recentImprests.length === 0">
+             <td colspan="5" class="px-4 py-4 text-center text-gray-400 text-xs">
+               No imprest requests yet
+             </td>
+           </tr>
+         </tbody>
+       </table>
+     </div>
+   </div>
 
 </div>

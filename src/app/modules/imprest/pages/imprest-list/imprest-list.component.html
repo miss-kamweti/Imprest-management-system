@@ -1,12 +1,12 @@
-<div class="p-4">
+<div class="p-3 space-y-2">
 
 
-  <div class="flex justify-between items-center mb-4">
-    <h1 class="text-2xl font-bold">
+  <div class="flex justify-between items-center mb-2">
+    <h1 class="text-xl font-bold">
       <span *ngIf="isAdmin">All Employee Imprests</span>
       <span *ngIf="!isAdmin">My Imprests</span>
     </h1>
-    <div class="flex gap-4 text-sm">
+    <div class="flex gap-3 text-xs">
       <span class="text-gray-600">Total: <strong>{{ totalCount }}</strong></span>
       <span class="text-yellow-600">Pending: <strong>{{ pendingCount }}</strong></span>
       <span class="text-green-600">Approved: <strong>{{ approvedCount }}</strong></span>
@@ -15,40 +15,41 @@
   </div>
 
   <!-- TABLE -->
-  <div class="bg-white shadow rounded-lg overflow-hidden">
+  <div class="shadow rounded-lg overflow-hidden">
 
     <table class="w-full">
 
       <!-- HEADER -->
       <thead class="bg-gray-900 text-white">
         <tr>
-          <th class="px-3 py-2 text-left text-xs font-medium">Employee</th>
-          <th class="px-3 py-2 text-left text-xs font-medium">Amount</th>
-          <th class="px-3 py-2 text-left text-xs font-medium">Purpose</th>
-          <th class="px-3 py-2 text-left text-xs font-medium">Date</th>
-          <th class="px-3 py-2 text-left text-xs font-medium">Status</th>
-          <th class="px-3 py-2 text-left text-xs font-medium">Withdrawn</th>
-          <th *ngIf="isAdmin" class="px-3 py-2 text-left text-xs font-medium">Actions</th>
-          <th *ngIf="!isAdmin" class="px-3 py-2 text-left text-xs font-medium">Actions</th>
+          <th class="px-2 py-1.5 text-left text-[10px] font-medium">Employee</th>
+          <th class="px-2 py-1.5 text-left text-[10px] font-medium">Amount</th>
+          <th class="px-2 py-1.5 text-left text-[10px] font-medium">Purpose</th>
+          <th class="px-2 py-1.5 text-left text-[10px] font-medium">Date</th>
+          <th class="px-2 py-1.5 text-left text-[10px] font-medium">Status</th>
+          <th class="px-2 py-1.5 text-left text-[10px] font-medium">Withdrawn</th>
+          <th *ngIf="isAdmin" class="px-2 py-1.5 text-left text-[10px] font-medium">Actions</th>
+          <th *ngIf="!isAdmin" class="px-2 py-1.5 text-left text-[10px] font-medium">Actions</th>
         </tr>
       </thead>
 
       <!-- BODY -->
       <tbody>
-        <tr *ngFor="let imp of imprests"
+        <tr *ngFor="let imp of imprests; let even = even"
+            [class.bg-white]="even" [class.bg-gray-50]="!even"
             class="border-b hover:bg-gray-50">
 
-          <td class="px-3 py-2 text-sm">{{ imp.employeeName }}</td>
+          <td class="px-2 py-1 text-xs text-gray-700">{{ imp.employeeName }}</td>
 
-          <td class="px-3 py-2 text-sm">KES {{ imp.amount | number }}</td>
+          <td class="px-2 py-1 text-xs">KES {{ imp.amount | number }}</td>
 
-          <td class="px-3 py-2 text-sm text-gray-600">{{ imp.purpose }}</td>
+          <td class="px-2 py-1 text-xs text-gray-500">{{ imp.purpose }}</td>
 
-          <td class="px-3 py-2 text-sm">{{ imp.date | date:'mediumDate' }}</td>
+          <td class="px-2 py-1 text-xs">{{ imp.date | date:'mediumDate' }}</td>
 
-          <td class="px-3 py-2">
+          <td class="px-2 py-1">
             <span
-              class="px-2 py-0.5 rounded-full text-white text-xs font-medium"
+              class="px-1 py-0.5 rounded-full text-[10px] font-semibold text-white"
               [ngClass]="{
                 'bg-yellow-500': imp.status === 'Pending',
                 'bg-green-600': imp.status === 'Approved',
@@ -60,37 +61,39 @@
             </span>
           </td>
 
-          <td class="px-3 py-2 text-sm">KES {{ (imp.withdrawnAmount || 0) | number }}</td>
+          <td class="px-2 py-1 text-xs">KES {{ (imp.withdrawnAmount || 0) | number }}</td>
 
           
-          <td *ngIf="isAdmin || isAccountant" class="px-3 py-2">
+          <td *ngIf="isAdmin || isAccountant" class="px-2 py-1">
             <div *ngIf="imp.status === 'Pending'" class="flex gap-1">
-              <button
-                class="bg-green-600 text-white px-2 py-1 rounded text-xs hover:bg-green-700"
-                (click)="approve(imp.id)"
-              >
-                Approve
-              </button>
-              <button
-                class="bg-red-600 text-white px-2 py-1 rounded text-xs hover:bg-red-700"
-                (click)="reject(imp.id)"
-              >
-                Reject
-              </button>
-            </div>
-            <span *ngIf="imp.status !== 'Pending'" class="text-gray-500 text-xs italic">
+               <button
+                 class="bg-green-600 text-white p-1 rounded hover:bg-green-700"
+                 (click)="approve(imp.id)"
+                 title="Approve"
+               >
+                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+               </button>
+               <button
+                 class="bg-red-600 text-white p-1 rounded hover:bg-red-700"
+                 (click)="reject(imp.id)"
+                 title="Reject"
+               >
+                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+               </button>
+             </div>
+            <span *ngIf="imp.status !== 'Pending'" class="text-gray-500 text-[10px] italic">
               Decision Finalized
             </span>
           </td>
 
           <!-- EMPLOYEE ACTIONS -->
-          <td *ngIf="!isAdmin && !isAccountant" class="px-3 py-2">
+          <td *ngIf="!isAdmin && !isAccountant" class="px-2 py-1">
             <button *ngIf="canWithdraw(imp)"
-                    class="bg-blue-600 text-white px-2 py-1 rounded text-xs hover:bg-blue-700"
+                    class="bg-blue-600 text-white px-1.5 py-0.5 rounded text-[10px] hover:bg-blue-700"
                     (click)="navigateToWithdraw(imp)">
               Withdraw
             </button>
-            <span *ngIf="!canWithdraw(imp)" class="text-gray-500 text-xs italic">
+            <span *ngIf="!canWithdraw(imp)" class="text-gray-500 text-[10px] italic">
               <span *ngIf="imp.status === 'Withdrawn'">Fully Withdrawn</span>
               <span *ngIf="imp.status !== 'Withdrawn'">Not Available</span>
             </span>

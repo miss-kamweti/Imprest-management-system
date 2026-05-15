@@ -10,12 +10,11 @@ import { Product } from 'src/app/shared/models/inventory.model';
 })
 export class InventoryDashboardComponent implements OnInit {
   products: Product[] = [];
-  lowStockProducts: Product[] = [];
   totalProducts = 0;
   totalValue = 0;
   lowStockCount = 0;
   outOfStockCount = 0;
-  isLowStockView = false;
+  showAddModal = false;
 
   constructor(
     private inventoryService: InventoryService,
@@ -23,26 +22,30 @@ export class InventoryDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.isLowStockView = params['lowStock'] === 'true';
-      this.loadData();
-    });
+    this.loadData();
   }
 
   loadData(): void {
     const allProducts = this.inventoryService.getProducts();
     const lowStock = this.inventoryService.getLowStockProducts();
 
-    if (this.isLowStockView) {
-      this.products = lowStock;
-    } else {
-      this.products = allProducts;
-    }
-
-    this.lowStockProducts = lowStock;
+    this.products = allProducts;
     this.totalProducts = this.inventoryService.getTotalProducts();
     this.totalValue = this.inventoryService.getTotalInventoryValue();
     this.lowStockCount = lowStock.length;
     this.outOfStockCount = this.inventoryService.getOutOfStockProducts().length;
+  }
+
+  openAddModal(): void {
+    this.showAddModal = true;
+  }
+
+  closeAddModal(): void {
+    this.showAddModal = false;
+  }
+
+  onProductSaved(product: Product): void {
+    this.inventoryService.addProduct(product);
+    this.loadData();
   }
 }

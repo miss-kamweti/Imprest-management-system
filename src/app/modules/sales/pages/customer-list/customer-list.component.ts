@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SalesService } from 'src/app/core/services/sales.service';
-import { Customer, Invoice } from 'src/app/shared/models/sales.model';
+import { Customer, SalesOrder, SalesOrderItem } from 'src/app/shared/models/sales.model';
 
 @Component({
   selector: 'app-customer-list',
@@ -10,7 +10,8 @@ import { Customer, Invoice } from 'src/app/shared/models/sales.model';
 export class CustomerListComponent implements OnInit {
   customers: Customer[] = [];
   selectedCustomer: Customer | null = null;
-  customerInvoices: Invoice[] = [];
+  customerOrders: SalesOrder[] = [];
+  customerOrderItems: SalesOrderItem[] = [];
 
   constructor(private salesService: SalesService) {}
 
@@ -20,11 +21,24 @@ export class CustomerListComponent implements OnInit {
 
   viewDetails(customer: Customer): void {
     this.selectedCustomer = customer;
-    this.customerInvoices = this.salesService.getInvoicesByCustomer(customer.id);
+    this.customerOrders = this.salesService
+      .getOrders()
+      .filter(o => o.customerId === customer.id)
+      .reverse();
+    this.customerOrderItems = this.customerOrders.flatMap(o => o.items);
   }
 
   closeDetails(): void {
     this.selectedCustomer = null;
-    this.customerInvoices = [];
+    this.customerOrders = [];
+    this.customerOrderItems = [];
+  }
+
+  isPaid(order: SalesOrder): boolean {
+    return order.status === 'delivered' || order.status === 'shipped';
+  }
+
+  isDelivered(order: SalesOrder): boolean {
+    return order.status === 'delivered';
   }
 }
