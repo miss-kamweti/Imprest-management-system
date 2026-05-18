@@ -52,9 +52,13 @@ export class WithdrawImprestComponent implements OnInit {
 
   loadPendingWithdrawals(): void {
     const allImprests = this.service.getImprests();
-    this.pendingWithdrawals = allImprests.filter(imp =>
+    const pending = allImprests.filter(imp =>
       imp.status === 'Withdrawal Pending'
     );
+    // Non-admin / non-accountant users only see their own pending withdrawals
+    this.pendingWithdrawals = this.isAccountant || this.isAdmin
+      ? pending
+      : pending.filter(imp => imp.createdBy === this.currentUser.username);
   }
 
   onImprestChange(): void {

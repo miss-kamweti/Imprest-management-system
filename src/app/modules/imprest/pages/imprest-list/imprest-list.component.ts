@@ -18,6 +18,9 @@ export class ImprestListComponent implements OnInit {
   approvedCount = 0;
   rejectedCount = 0;
 
+  showModal = false;
+  modalType: 'actions' | 'request' | 'withdraw' | 'approved' | 'pending' | 'rejected' = 'actions';
+
   constructor(private service: ImprestService, private router: Router) {}
 
   ngOnInit(): void {
@@ -30,6 +33,20 @@ export class ImprestListComponent implements OnInit {
     this.isAccountant = this.currentUser.role?.toLowerCase() === 'accountant';
 
     this.loadImprests();
+  }
+
+  openActionsModal() {
+    this.modalType = 'actions';
+    this.showModal = true;
+  }
+
+  openModal(type: 'request' | 'withdraw' | 'approved' | 'pending' | 'rejected') {
+    this.modalType = type;
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
   }
 
   loadImprests(): void {

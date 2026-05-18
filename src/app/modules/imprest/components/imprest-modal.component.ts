@@ -13,6 +13,7 @@ import { Imprest } from 'src/app/shared/models/imprest.model';
 export class ImprestModalComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<void>();
+  @Output() typeChange = new EventEmitter<'pending' | 'request' | 'withdraw' | 'approved' | 'rejected' | 'actions'>();
   @Input() type: 'pending' | 'request' | 'withdraw' | 'approved' | 'rejected' | 'actions' = 'pending';
 
   imprests: Imprest[] = [];

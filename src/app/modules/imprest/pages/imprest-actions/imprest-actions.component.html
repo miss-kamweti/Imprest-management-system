@@ -9,43 +9,209 @@
 
   <h2 class="text-2xl font-bold text-gray-800 mb-6">Total Imprests</h2>
 
-  <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-     <button (click)="openModal('request')"
-             class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-blue-500 text-blue-600 hover:bg-blue-50 transition">
-       <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-       <span class="text-sm font-semibold">Request Imprest</span>
-     </button>
+  <!-- Action Buttons -->
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+    <button (click)="selectView('request')"
+            [class.ring-2]="selectedView === 'request'"
+            [class.ring-blue-500]="selectedView === 'request'"
+            class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-blue-500 text-blue-600 hover:bg-blue-50 transition">
+      <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+      <span class="text-sm font-semibold">Request Imprest</span>
+    </button>
 
-     <button (click)="openModal('pending')"
-             class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-yellow-500 text-yellow-600 hover:bg-yellow-50 transition">
-       <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-       <span class="text-sm font-semibold">Pending ({{ pendingImprests.length }})</span>
-     </button>
+    <button (click)="selectView('pending')"
+            [class.ring-2]="selectedView === 'pending'"
+            [class.ring-yellow-500]="selectedView === 'pending'"
+            class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-yellow-500 text-yellow-600 hover:bg-yellow-50 transition">
+      <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <span class="text-sm font-semibold">Pending ({{ pendingImprests.length }})</span>
+    </button>
 
-     <button (click)="openModal('approved')"
-             class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-green-500 text-green-600 hover:bg-green-50 transition">
-       <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-       <span class="text-sm font-semibold">Approved ({{ approvedImprests.length }})</span>
-     </button>
+    <button (click)="selectView('approved')"
+            [class.ring-2]="selectedView === 'approved'"
+            [class.ring-green-500]="selectedView === 'approved'"
+            class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-green-500 text-green-600 hover:bg-green-50 transition">
+      <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <span class="text-sm font-semibold">Approved ({{ approvedImprests.length }})</span>
+    </button>
 
-     <button (click)="openModal('rejected')"
-             class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-red-500 text-red-600 hover:bg-red-50 transition">
-       <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-       <span class="text-sm font-semibold">Rejected ({{ rejectedImprests.length }})</span>
-     </button>
+    <button (click)="selectView('rejected')"
+            [class.ring-2]="selectedView === 'rejected'"
+            [class.ring-red-500]="selectedView === 'rejected'"
+            class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-red-500 text-red-600 hover:bg-red-50 transition">
+      <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      <span class="text-sm font-semibold">Rejected ({{ rejectedImprests.length }})</span>
+    </button>
 
-     <button (click)="openModal('withdraw')"
-             class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-purple-500 text-purple-600 hover:bg-purple-50 transition">
-        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-        <span class="text-sm font-semibold">Withdraw Imprest</span>
+    <button (click)="selectView('withdraw')"
+            [class.ring-2]="selectedView === 'withdraw'"
+            [class.ring-purple-500]="selectedView === 'withdraw'"
+            class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-purple-500 text-purple-600 hover:bg-purple-50 transition">
+      <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+      <span class="text-sm font-semibold">Withdraw Imprest</span>
+    </button>
+  </div>
+
+  <!-- ==================== INLINE CONTENT SECTIONS ==================== -->
+
+  <!-- Request Imprest Form -->
+  <div *ngIf="selectedView === 'request'" class="bg-white shadow rounded-lg p-6 mb-6">
+    <h3 class="text-lg font-bold text-gray-800 mb-4">Request Imprest</h3>
+    <p class="text-xs text-gray-500 mb-4">Fill in the details below</p>
+
+    <div class="mb-3">
+      <label class="block text-xs font-medium text-gray-600 mb-1">Amount (KES)</label>
+      <input type="number" [(ngModel)]="requestAmount" min="0"
+             class="w-full border rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+             placeholder="0">
+    </div>
+
+    <div class="mb-3">
+      <label class="block text-xs font-medium text-gray-600 mb-1">Purpose</label>
+      <input type="text" [(ngModel)]="requestPurpose"
+             class="w-full border rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+             placeholder="Reason for imprest">
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-xs font-medium text-gray-600 mb-1">Date</label>
+      <input type="date" [(ngModel)]="requestDate"
+             class="w-full border rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+
+    <button (click)="onSubmitRequest()"
+            class="w-full bg-blue-600 text-white p-2 rounded text-sm hover:bg-blue-700">
+      Submit Request
+    </button>
+  </div>
+
+  <!-- Pending Imprests List -->
+  <div *ngIf="selectedView === 'pending'" class="bg-white shadow rounded-lg p-6 mb-6">
+    <h3 class="text-lg font-bold text-yellow-700 mb-3">Pending Imprests ({{ pendingImprests.length }})</h3>
+    <div *ngIf="pendingImprests.length === 0" class="text-sm text-gray-400">No pending imprests.</div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left" *ngIf="pendingImprests.length > 0">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-2 py-1 text-xs font-medium text-gray-500">Employee</th>
+            <th class="px-2 py-1 text-xs font-medium text-gray-500">Amount</th>
+            <th class="px-2 py-1 text-xs font-medium text-gray-500">Purpose</th>
+            <th class="px-2 py-1 text-xs font-medium text-gray-500">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let imp of pendingImprests; let even = even"
+              [class.bg-white]="even" [class.bg-gray-50]="!even" class="border-b">
+            <td class="px-2 py-1 text-xs">{{ imp.employeeName }}</td>
+            <td class="px-2 py-1 text-xs">KES {{ imp.amount | number }}</td>
+            <td class="px-2 py-1 text-xs text-gray-500">{{ imp.purpose }}</td>
+            <td class="px-2 py-1 text-xs">{{ imp.date | date:'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Approved Imprests List -->
+  <div *ngIf="selectedView === 'approved'" class="bg-white shadow rounded-lg p-6 mb-6">
+    <h3 class="text-lg font-bold text-green-700 mb-3">Approved Imprests ({{ approvedImprests.length }})</h3>
+    <div *ngIf="approvedImprests.length === 0" class="text-sm text-gray-400">No approved imprests.</div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left" *ngIf="approvedImprests.length > 0">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-2 py-1 text-xs font-medium text-gray-500">Employee</th>
+            <th class="px-2 py-1 text-xs font-medium text-gray-500">Amount</th>
+            <th class="px-2 py-1 text-xs font-medium text-gray-500">Purpose</th>
+            <th class="px-2 py-1 text-xs font-medium text-gray-500">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let imp of approvedImprests; let even = even"
+              [class.bg-white]="even" [class.bg-gray-50]="!even" class="border-b">
+            <td class="px-2 py-1 text-xs">{{ imp.employeeName }}</td>
+            <td class="px-2 py-1 text-xs">KES {{ imp.amount | number }}</td>
+            <td class="px-2 py-1 text-xs text-gray-500">{{ imp.purpose }}</td>
+            <td class="px-2 py-1 text-xs">{{ imp.date | date:'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Rejected Imprests List -->
+  <div *ngIf="selectedView === 'rejected'" class="bg-white shadow rounded-lg p-6 mb-6">
+    <h3 class="text-lg font-bold text-red-700 mb-3">Rejected Imprests ({{ rejectedImprests.length }})</h3>
+    <div *ngIf="rejectedImprests.length === 0" class="text-sm text-gray-400">No rejected imprests.</div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left" *ngIf="rejectedImprests.length > 0">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-2 py-1 text-xs font-medium text-gray-500">Employee</th>
+            <th class="px-2 py-1 text-xs font-medium text-gray-500">Amount</th>
+            <th class="px-2 py-1 text-xs font-medium text-gray-500">Purpose</th>
+            <th class="px-2 py-1 text-xs font-medium text-gray-500">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let imp of rejectedImprests; let even = even"
+              [class.bg-white]="even" [class.bg-gray-50]="!even" class="border-b">
+            <td class="px-2 py-1 text-xs">{{ imp.employeeName }}</td>
+            <td class="px-2 py-1 text-xs">KES {{ imp.amount | number }}</td>
+            <td class="px-2 py-1 text-xs text-gray-500">{{ imp.purpose }}</td>
+            <td class="px-2 py-1 text-xs">{{ imp.date | date:'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Withdraw Imprest Form -->
+  <div *ngIf="selectedView === 'withdraw'" class="bg-white shadow rounded-lg p-6 mb-6">
+    <h3 class="text-lg font-bold text-purple-700 mb-4">Withdraw Imprest</h3>
+    <p class="text-xs text-gray-500 mb-4">Select an approved imprest to withdraw</p>
+
+    <div class="mb-4">
+      <label class="block text-xs font-medium text-gray-600 mb-1">Select Approved Imprest</label>
+      <select [(ngModel)]="selectedImprestId"
+              (change)="onWithdrawImprestChange()"
+              class="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white">
+        <option [ngValue]="null">-- Choose an imprest --</option>
+        <option *ngFor="let imp of getAvailableImprests()" [ngValue]="imp.id" class="py-2">
+          {{ imp.employeeName }} — {{ imp.purpose }} - KES {{ imp.amount | number }}
+          <span class="text-gray-500">(Remaining: KES {{ getRemaining(imp) | number }})</span>
+        </option>
+      </select>
+    </div>
+
+    <div *ngIf="selectedImprestId" class="bg-purple-50 border border-purple-200 p-3 rounded mb-4">
+      <p class="font-semibold text-purple-800 text-sm">Available Balance: KES {{ getRemaining() | number }}</p>
+    </div>
+
+    <div *ngIf="selectedImprestId" class="space-y-3">
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Amount to Withdraw (KES)</label>
+        <input type="number" [(ngModel)]="withdrawAmount" min="1"
+               class="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+               placeholder="0">
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Reason for Withdrawal</label>
+        <textarea [(ngModel)]="withdrawReason" rows="3"
+                  class="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  placeholder="Provide reason for withdrawal"></textarea>
+      </div>
+
+      <button (click)="onSubmitWithdraw()"
+              class="w-full bg-purple-600 text-white p-2 rounded text-sm hover:bg-purple-700">
+        Confirm Withdrawal
       </button>
-   </div>
+    </div>
 
-   <!-- Popup Modal -->
-   <app-imprest-modal
-     *ngIf="showModal"
-     [type]="modalType"
-     (close)="closeModal()"
-     (save)="closeModal()"
-   ></app-imprest-modal>
- </div>
+    <div *ngIf="getAvailableImprests().length === 0" class="text-center py-4">
+      <p class="text-gray-500 text-sm">No approved imprests available for withdrawal.</p>
+    </div>
+  </div>
+
+</div>

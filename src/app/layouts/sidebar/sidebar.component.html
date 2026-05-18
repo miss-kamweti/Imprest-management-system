@@ -92,7 +92,7 @@
         </button>
       </div>
 
-<app-imprest-modal *ngIf="showImprestModal" [type]="imprestModalType" (close)="closeImprestModal()"></app-imprest-modal>
+<app-imprest-modal *ngIf="showImprestModal" [type]="imprestModalType" (close)="closeImprestModal()" (typeChange)="openImprestModal($event)"></app-imprest-modal>
 
    </nav>
 

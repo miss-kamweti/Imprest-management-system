@@ -60,6 +60,16 @@ export class LoginComponent implements OnInit, OnDestroy {
     );
 
     if (!matchedUser || matchedUser.password !== p) {
+      // Detect corrupted user storage (duplicate IDs or missing default users)
+      const ids = allUsers.map(u => u.id);
+      const hasDuplicateIds = new Set(ids).size !== ids.length;
+      const hasAllDefaults = ['kinuthia', 'john', 'Jane', 'Molly']
+        .every(name => allUsers.some(u => u.username.toLowerCase() === name.toLowerCase()));
+      if (hasDuplicateIds || !hasAllDefaults) {
+        localStorage.removeItem('erp_users');
+        alert('User data was corrupted and has been reset. Please try logging in again.');
+        return;
+      }
       alert('Invalid username or password');
       return;
     }

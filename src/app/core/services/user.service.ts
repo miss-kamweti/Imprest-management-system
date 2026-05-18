@@ -25,12 +25,23 @@ export class UserService {
     if (stored) {
       try {
         const parsedUsers: User[] = JSON.parse(stored);
+        // Deduplicate by username (last entry wins) to guard against corrupted storage
+        const byUsername = new Map<string, User>();
+        for (const u of parsedUsers) {
+          byUsername.set(u.username, u);
+        }
+        // Also deduplicate by ID to catch duplicate-ID corruption
+        const byId = new Map<number, User>();
+        for (const u of byUsername.values()) {
+          byId.set(u.id, u);
+        }
+        const deduped = Array.from(byId.values());
         // Replace baseUsers with stored data, but ensure default admin users exist
-        const storedMap = new Map(parsedUsers.map(u => [u.username, u]));
+        const storedMap = new Map(deduped.map(u => [u.username, u]));
         const newBaseUsers: User[] = [];
-        // Add stored users first
-        for (const stored of parsedUsers) {
-          newBaseUsers.push(stored);
+        // Add stored users first (use deduped array, not the original parsedUsers)
+        for (const u of deduped) {
+          newBaseUsers.push(u);
         }
         // Ensure default admin users are present (in case storage was cleared)
         for (const def of this.getDefaultUsers()) {
@@ -84,7 +95,7 @@ export class UserService {
         storageWeight: 0
       },
       {
-        id: 3,
+        id: 4,
         username: 'Molly',
         email: 'mollykamweti@gmail.com',
         password: 'molly123',
