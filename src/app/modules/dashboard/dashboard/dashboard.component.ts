@@ -64,8 +64,7 @@ export class DashboardComponent implements OnInit {
       .reduce((sum, d) => sum + (d.amount || 0), 0);
 
     this.totalWithdrawnAmount = relevantImprests
-      .filter(d => d.status === 'Withdrawn')
-      .reduce((sum, d) => sum + (d.withdrawnAmount || d.amount || 0), 0);
+      .reduce((sum, d) => sum + (d.withdrawnAmount || 0), 0);
 
   
     this.recentImprests = [...relevantImprests]

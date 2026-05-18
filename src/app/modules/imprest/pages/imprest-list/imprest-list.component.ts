@@ -89,6 +89,20 @@ export class ImprestListComponent implements OnInit {
      }
    }
 
+   approveWithdrawal(id: number): void {
+     if (confirm('Are you sure you want to approve this withdrawal?')) {
+       this.service.approveWithdrawal(id);
+       this.loadImprests();
+     }
+   }
+
+   rejectWithdrawal(id: number): void {
+     if (confirm('Are you sure you want to reject this withdrawal?')) {
+       this.service.rejectWithdrawal(id);
+       this.loadImprests();
+     }
+   }
+
   // Calculate remaining balance for an imprest
   getRemainingForImprest(imprest: any): number {
     return imprest.amount - (imprest.withdrawnAmount || 0);

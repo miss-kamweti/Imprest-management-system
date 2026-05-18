@@ -70,7 +70,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         alert('User data was corrupted and has been reset. Please try logging in again.');
         return;
       }
-      alert('Invalid username or password');
+      // Give a helpful hint based on whether the user exists
+      if (!matchedUser) {
+        alert('User not found. Check the username and try again.');
+      } else {
+        alert('Invalid password. If this account was created by an admin, the default password is: default123');
+      }
       return;
     }
 
